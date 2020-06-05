@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import parse from 'autosuggest-highlight/parse';
 import throttle from 'lodash/throttle';
-
+import axios from 'axios';
 
 
 function loadScript(src: string, position: HTMLElement | null, id: string) {
@@ -41,6 +41,7 @@ interface Props{
 }
 interface PlaceType {
   description: string;
+  place_id: string;
   structured_formatting: {
     main_text: string;
     secondary_text: string;
@@ -60,6 +61,9 @@ const GoogleMaps: React.FunctionComponent<Props> = (props) =>{
   // const [inputValue, setInputValue] = React.useState('');
   const [options, setOptions] = React.useState<PlaceType[]>([]);
   const loaded = React.useRef(false);
+  
+  console.log(value);
+  console.log(inputValue);
 
   if (typeof window !== 'undefined' && !loaded.current) {
     if (!document.querySelector('#google-maps')) {
@@ -71,16 +75,29 @@ const GoogleMaps: React.FunctionComponent<Props> = (props) =>{
     }
     loaded.current = true;
   }
-
+  React.useEffect(() => {
+    // to extract the latlong form a placeid
+    let key = "AIzaSyBFvfsWl8OqrjOBovRkQ0s7Q_ijbxJx6dk";
+    let placeid : String;
+    if (value){
+            placeid = value.place_id;
+            const proxyurl = "https://cors-anywhere.herokuapp.com/";
+            const url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeid}&key=${key}`;
+            axios.get(proxyurl + url).then(res => console.log(res));
+    }
+  }, [value, inputValue]);
+  
   const fetch = React.useMemo(
     () =>
       throttle((request: { input: string }, callback: (results?: PlaceType[]) => void) => {
         (autocompleteService.current as any).getPlacePredictions(request, callback);
+        
       }, 200),
     [],
   );
-
+    
   React.useEffect(() => {
+
     let active = true;
 
     if (!autocompleteService.current && (window as any).google) {
