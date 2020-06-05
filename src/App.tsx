@@ -30,7 +30,7 @@ React.useEffect(() => {
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${long}&radius=${radius}&type=restaurant&key=${key}`;
     axios.get(proxyurl + url).then((res) => {
-      console.log(res);
+      console.log(res.data.results);
     });
   }
 }, [radiusValue, locationValue]);

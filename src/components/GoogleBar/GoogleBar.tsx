@@ -86,7 +86,7 @@ const GoogleMaps: React.FunctionComponent<Props> = (props) =>{
         setLocationValue(result);
       });
     }
-  }, [value, inputValue, setLocationValue]);
+  }, [value, setLocationValue]);
   
   const fetch = React.useMemo(
     () =>
