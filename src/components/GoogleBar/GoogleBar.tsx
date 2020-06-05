@@ -69,7 +69,6 @@ const GoogleMaps: React.FunctionComponent<Props> = (props) =>{
         "google-maps"
       );
     }
-
     loaded.current = true;
   }
 
@@ -86,6 +85,7 @@ const GoogleMaps: React.FunctionComponent<Props> = (props) =>{
 
     if (!autocompleteService.current && (window as any).google) {
       autocompleteService.current = new (window as any).google.maps.places.AutocompleteService();
+      
     }
     if (!autocompleteService.current) {
       return undefined;

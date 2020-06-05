@@ -2,7 +2,6 @@ import React from 'react';
 import { fade, makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -113,7 +112,7 @@ const PrimarySearchAppBar: React.FunctionComponent = () => {
             <Select
               labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
-              value={radiusValue}
+              value={radiusValue || 5}
               onChange={handleChange}
               label="Radius"
             >
@@ -126,9 +125,7 @@ const PrimarySearchAppBar: React.FunctionComponent = () => {
               <MenuItem value={50}>50KM</MenuItem>
             </Select>
           </FormControl>
-          <Button variant="outlined" size="large" color="default" className={classes.button}>
-            search
-        </Button>
+         
           {inputValue} 
           {radiusValue}
         </Toolbar>
