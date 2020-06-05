@@ -36,8 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 interface Props{
-  inputValue: string;
-  setInputValue:any;
+  setLocationValue:any;
 }
 interface PlaceType {
   description: string;
@@ -54,11 +53,10 @@ interface PlaceType {
   };
 }
 const GoogleMaps: React.FunctionComponent<Props> = (props) =>{
-  const inputValue = props.inputValue;
-  const setInputValue = props.setInputValue;
+  const setLocationValue = props.setLocationValue;
   const classes = useStyles();
   const [value, setValue] = React.useState<PlaceType | null>(null);
-  // const [inputValue, setInputValue] = React.useState('');
+  const [inputValue, setInputValue] = React.useState('');
   const [options, setOptions] = React.useState<PlaceType[]>([]);
   const loaded = React.useRef(false);
   
@@ -78,14 +76,17 @@ const GoogleMaps: React.FunctionComponent<Props> = (props) =>{
   React.useEffect(() => {
     // to extract the latlong form a placeid
     let key = "AIzaSyBFvfsWl8OqrjOBovRkQ0s7Q_ijbxJx6dk";
-    let placeid : String;
-    if (value){
-            placeid = value.place_id;
-            const proxyurl = "https://cors-anywhere.herokuapp.com/";
-            const url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeid}&key=${key}`;
-            axios.get(proxyurl + url).then(res => console.log(res));
+    let placeid: String;
+    if (value) {
+      placeid = value.place_id;
+      const proxyurl = "https://cors-anywhere.herokuapp.com/";
+      const url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeid}&key=${key}`;
+      axios.get(proxyurl + url).then((res) => {
+        const result: any[] = res.data.result.geometry.location;
+        setLocationValue(result);
+      });
     }
-  }, [value, inputValue]);
+  }, [value, inputValue, setLocationValue]);
   
   const fetch = React.useMemo(
     () =>

@@ -82,20 +82,26 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-// interface Props {
-//   inputValue: string;
-//   setInputValue:any;
-// }
-const PrimarySearchAppBar: React.FunctionComponent = () => {
+
+interface Props {
+  locationValue: any;
+  setLocationValue:any;
+  radiusValue:any;
+  setRadiusValue:any;
+}
+
+const PrimarySearchAppBar: React.FunctionComponent<Props> = (Props) => {
     const classes = useStyles();
-  const [inputValue, setInputValue] = React.useState('');
-  const [radiusValue, setRadiusValue] = React.useState<string>();
+    const locationValue = Props.locationValue;
+    const setLocationValue = Props.setLocationValue;
+    const radiusValue  = Props.radiusValue;
+    const setRadiusValue = Props.setRadiusValue;
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setRadiusValue(event.target.value as string);
+    setRadiusValue(event.target.value);
   };
   
-
+console.log(locationValue);
   return (
     <div className={classes.grow}>
       <AppBar position="static">
@@ -103,12 +109,11 @@ const PrimarySearchAppBar: React.FunctionComponent = () => {
           <Typography className={classes.title} variant="h6" noWrap>
             GOOGLE MAP
           </Typography>
-          <GoogleSearhBar
-            inputValue={inputValue}
-            setInputValue={setInputValue}
-          />
+          <GoogleSearhBar setLocationValue={setLocationValue} />
           <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel id="demo-simple-select-outlined-label">Radius</InputLabel>
+            <InputLabel id="demo-simple-select-outlined-label">
+              Radius
+            </InputLabel>
             <Select
               labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
@@ -116,7 +121,6 @@ const PrimarySearchAppBar: React.FunctionComponent = () => {
               onChange={handleChange}
               label="Radius"
             >
-              
               <MenuItem value={5}>5KM</MenuItem>
               <MenuItem value={10}>10KM</MenuItem>
               <MenuItem value={20}>20KM</MenuItem>
@@ -125,8 +129,8 @@ const PrimarySearchAppBar: React.FunctionComponent = () => {
               <MenuItem value={50}>50KM</MenuItem>
             </Select>
           </FormControl>
-         
-          {inputValue} 
+
+          {/* {locationValue} */}
           {radiusValue}
         </Toolbar>
       </AppBar>
