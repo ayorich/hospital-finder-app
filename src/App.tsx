@@ -4,7 +4,6 @@ import axios from "axios";
 import HeaderBar from './components/HeaderBar/HeaderBar';
 import MapDisplay from './components/mapDisplay/mapDisplay';
 
-
 import './App.css';
 
 interface latlong {
@@ -12,15 +11,6 @@ interface latlong {
   lng:number;
 }
 
-
-// interface map{
-//   id: string;
-//   name: string;
-//   place_id: string;
-//   rating: number;
-//   user_ratings_total: number;
-
-// }
 const App: React.FC = (): JSX.Element => {
 const [locationValue, setLocationValue] = React.useState<latlong>();
   const [radiusValue, setRadiusValue] = React.useState<number>(5);
@@ -45,13 +35,9 @@ React.useEffect(() => {
     });
   }
 }, [radiusValue, locationValue]);
-// id: "8b2aad7a50a1b54308c19c4502d7988b6dd03cce"
-// name: "Fremont Hotel & Casino"
-// place_id: "ChIJFTJhO6DDyIARYs7dJsDxK2Y"
-// rating: 4.3
-// user_ratings_total: 10701
 
   return (
+    
     <div className="App">
       <HeaderBar
         locationValue={locationValue}
