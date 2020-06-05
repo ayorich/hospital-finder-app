@@ -2,6 +2,7 @@ import React from 'react';
 import axios from "axios";
 
 import HeaderBar from './components/HeaderBar/HeaderBar';
+import MapDisplay from './components/mapDisplay/mapDisplay';
 
 
 import './App.css';
@@ -11,10 +12,19 @@ interface latlong {
   lng:number;
 }
 
+
+// interface map{
+//   id: string;
+//   name: string;
+//   place_id: string;
+//   rating: number;
+//   user_ratings_total: number;
+
+// }
 const App: React.FC = (): JSX.Element => {
 const [locationValue, setLocationValue] = React.useState<latlong>();
-const [radiusValue, setRadiusValue] = React.useState<number>(5);
-console.log(locationValue)
+  const [radiusValue, setRadiusValue] = React.useState<number>(5);
+  const [mapValue, setmapValue] = React.useState();
 React.useEffect(() => {
   // to extract the latlong form a placeid
   let key = "AIzaSyBFvfsWl8OqrjOBovRkQ0s7Q_ijbxJx6dk";
@@ -31,9 +41,15 @@ React.useEffect(() => {
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${long}&radius=${radius}&type=restaurant&key=${key}`;
     axios.get(proxyurl + url).then((res) => {
       console.log(res.data.results);
+      setmapValue(res.data.results);
     });
   }
 }, [radiusValue, locationValue]);
+// id: "8b2aad7a50a1b54308c19c4502d7988b6dd03cce"
+// name: "Fremont Hotel & Casino"
+// place_id: "ChIJFTJhO6DDyIARYs7dJsDxK2Y"
+// rating: 4.3
+// user_ratings_total: 10701
 
   return (
     <div className="App">
@@ -43,7 +59,9 @@ React.useEffect(() => {
         radiusValue={radiusValue}
         setRadiusValue={setRadiusValue}
       />
-      <div>map heres</div>
+      <MapDisplay
+        mapValue={mapValue}
+      />
     </div>
   );
 }
