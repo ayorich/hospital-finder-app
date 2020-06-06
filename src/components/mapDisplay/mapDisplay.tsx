@@ -42,7 +42,7 @@ const useStyles = makeStyles({
                 </TableHead>
                 <TableBody>
                      {rows.map((row:any) => (
-                        <TableRow key={row.name}>
+                        <TableRow key={row.id}>
                             <TableCell component="th" scope="row">
                                 {row.name}
                             </TableCell>
