@@ -53,13 +53,11 @@ const App: React.FC = (): JSX.Element => {
 
 React.useEffect(() => {
   
-  // to extract the latlong form a placeid
   let key = "AIzaSyBFvfsWl8OqrjOBovRkQ0s7Q_ijbxJx6dk";
   let lat: number;
   let long: number;
   let radius : any ;
   let keyword :any;
-  console.log(searchQuery)
   if (locationValue && searchQuery) {
     setSpinner(true);
     radius = radiusValue * 1000;

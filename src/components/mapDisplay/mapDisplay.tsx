@@ -13,12 +13,14 @@ const useStyles = makeStyles({
         minWidth: 650,
     },
 });
-
+/**
+ * GOOGLE DATA EXTRACTED
 // id: "8b2aad7a50a1b54308c19c4502d7988b6dd03cce"
 // name: "Fremont Hotel & Casino"
 // place_id: "ChIJFTJhO6DDyIARYs7dJsDxK2Y"
 // rating: 4.3
 // user_ratings_total: 10701
+***/
 
     interface Props { 
         mapValue:any;
