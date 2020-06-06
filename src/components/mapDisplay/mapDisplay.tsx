@@ -30,7 +30,7 @@ const useStyles = makeStyles({
 
     return (
         <TableContainer component={Paper}>
-            <Table className={classes.table} aria-label="simple table">
+            {rows ?<Table className={classes.table} aria-label="simple table">
                 <TableHead>
                     <TableRow>
                         <TableCell>NAME</TableCell>
@@ -39,7 +39,7 @@ const useStyles = makeStyles({
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows ? rows.map((row:any) => (
+                     {rows.map((row:any) => (
                         <TableRow key={row.name}>
                             <TableCell component="th" scope="row">
                                 {row.name}
@@ -47,9 +47,9 @@ const useStyles = makeStyles({
                             <TableCell align="right">{row.rating}</TableCell>
                             <TableCell align="right">{row.user_ratings_total}</TableCell>
                         </TableRow>
-                    )) : null} 
+                    )) }
                 </TableBody>
-            </Table>
+            </Table>: null} 
         </TableContainer>
     );
 }
