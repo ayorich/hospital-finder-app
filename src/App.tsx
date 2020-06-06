@@ -7,43 +7,73 @@ import MapDisplay from './components/mapDisplay/mapDisplay';
 import './App.css';
 
 interface latlong {
-  lat: number;
-  lng:number;
+  latitude: number;
+  longitude:number;
 }
 
 const App: React.FC = (): JSX.Element => {
-const [locationValue, setLocationValue] = React.useState<latlong>();
+  const [locationValue, setLocationValue] = React.useState<latlong>();
+  const [searchQuery, setsearchQuery] = React.useState('');
   const [radiusValue, setRadiusValue] = React.useState<number>(5);
   const [mapValue, setmapValue] = React.useState();
+  
+
+
+  React.useEffect(() => {
+    let location;
+    navigator.geolocation.getCurrentPosition(function(position){
+        console.log(position)
+      location = {
+        latitude: position.coords.latitude,
+        longitude : position.coords.longitude
+
+      }
+      setLocationValue(location);
+    });
+    if(navigator.geolocation){
+      navigator.geolocation.watchPosition(function(position){
+        console.log(position)
+        location = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+
+        }
+        setLocationValue(location);
+      })
+    }
+    
+  }, []);
+
 React.useEffect(() => {
+  
   // to extract the latlong form a placeid
   let key = "AIzaSyBFvfsWl8OqrjOBovRkQ0s7Q_ijbxJx6dk";
-  let lat: any;
-  let long: any;
+  let lat: number;
+  let long: number;
   let radius : any ;
-  if (locationValue && radiusValue) {
+  let keyword :any;
+  if (locationValue) {
     radius = radiusValue * 1000;
-    lat = locationValue.lat;
-    long = locationValue.lng;
-    console.log(lat);
-    console.log(long);
+    lat = locationValue.latitude;
+    long = locationValue.longitude;
+    
+    keyword = searchQuery;
+    
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${long}&radius=${radius}&type=restaurant&key=${key}`;
+    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${long}&radius=${radius}&type=restaurant&keyword=${keyword}&key=${key}`;
     axios.get(proxyurl + url).then((res) => {
-      console.log(res.data.results);
       setmapValue(res.data.results);
     });
   }
-}, [radiusValue, locationValue]);
+}, [radiusValue, locationValue, searchQuery]);
 
   return (
-    
     <div className="App">
       <HeaderBar
-        locationValue={locationValue}
-        setLocationValue={setLocationValue}
         radiusValue={radiusValue}
         setRadiusValue={setRadiusValue}
+        setsearchQuery={setsearchQuery}
+        searchQuery={searchQuery}
       />
       <MapDisplay
         mapValue={mapValue}
