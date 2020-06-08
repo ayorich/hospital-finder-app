@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -8,11 +8,15 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
+
+
 const useStyles = makeStyles({
     table: {
         minWidth: 650,
     },
 });
+
+
 /**
  * GOOGLE DATA EXTRACTED
 // id: "8b2aad7a50a1b54308c19c4502d7988b6dd03cce"
@@ -53,7 +57,8 @@ const useStyles = makeStyles({
                 </TableBody>
             </Table>: null} 
         </TableContainer>
-    );
+                
+  );
 }
 
 

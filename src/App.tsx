@@ -1,19 +1,35 @@
 import React from 'react';
 import axios from "axios";
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import HeaderBar from './components/HeaderBar/HeaderBar';
 import MapDisplay from './components/mapDisplay/mapDisplay';
+import SideBar from './components/SideBar/SideBar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import firebase from './firebaseConfig';
 
+import Grid from '@material-ui/core/Grid';
 import './App.css';
 
-const useStyles = makeStyles({
-  spinner: {
-    marginTop: '30px',
-  },
-});
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(12, 1fr)',
+      gridGap: theme.spacing(3),
+    },
+    paper: {
+      padding: theme.spacing(1),
+      textAlign: 'center',
+      color: theme.palette.text.secondary,
+      whiteSpace: 'nowrap',
+      marginBottom: theme.spacing(1),
+    },
+    spinner: {
+      marginTop: '30px',
+    },
+  }),
+);
 interface latlong {
   latitude: number;
   longitude:number;
@@ -60,6 +76,7 @@ React.useEffect(() => {
   let long: number;
   let radius : any ;
   let keyword :any;
+  let data :any[];
   if (locationValue && searchQuery) {
     setSpinner(true);
     radius = radiusValue * 1000;
@@ -75,8 +92,11 @@ React.useEffect(() => {
       .then((res) => {
         setSpinner(false);
         setmapValue(res.data.results);
+        data=res.data.results;
+        console.log(firebase.db);
+
       })
-      .then(res => console.log(firebase.db));
+      .then(res => console.log(data));
     //call a function to store recent data in firestore .then()
   }
 }, [radiusValue, locationValue, searchQuery]);
@@ -89,10 +109,20 @@ React.useEffect(() => {
         setsearchQuery={setsearchQuery}
         searchQuery={searchQuery}
       />
-      {spinner ? <CircularProgress className={classes.spinner}/> : 
-      <MapDisplay
-        mapValue={mapValue}
-      />}
+      <Grid container spacing={2}>
+        <Grid item xs={9}>
+          {spinner ? <CircularProgress className={classes.spinner} /> :
+            <MapDisplay
+              mapValue={mapValue}
+            />}
+        </Grid>
+        <Grid item xs={3}>
+          <SideBar
+            setmapValue={setmapValue}
+            setSpinner={setSpinner}
+          />
+         </Grid>
+      </Grid>
       {/* CREATE A SIDEBAR TO DISPLAY PREVIOUS SEARCH RESULTS WITH A ONCLICK TO SHOW RESULTS ON MAP-DISPLAY */}
     </div>
   );
