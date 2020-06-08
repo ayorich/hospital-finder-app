@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import HeaderBar from './components/HeaderBar/HeaderBar';
 import MapDisplay from './components/mapDisplay/mapDisplay';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import firebase from './firebaseConfig';
 
 import './App.css';
 
@@ -53,7 +54,8 @@ const App: React.FC = (): JSX.Element => {
 
 React.useEffect(() => {
   
-  let key = "AIzaSyBFvfsWl8OqrjOBovRkQ0s7Q_ijbxJx6dk";
+  // let key = "AIzaSyBFvfsWl8OqrjOBovRkQ0s7Q_ijbxJx6dk";
+  let key = process.env.REACT_APP_API_MAP_KEY;
   let lat: number;
   let long: number;
   let radius : any ;
@@ -68,10 +70,14 @@ React.useEffect(() => {
     
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${long}&radius=${radius}&type=hospital&keyword=${keyword}&key=${key}`;
-    axios.get(proxyurl + url).then((res) => {
-      setSpinner(false)
-      setmapValue(res.data.results);
-    });
+    axios
+      .get(proxyurl + url)
+      .then((res) => {
+        setSpinner(false);
+        setmapValue(res.data.results);
+      })
+      .then(res => console.log(firebase.db));
+    //call a function to store recent data in firestore .then()
   }
 }, [radiusValue, locationValue, searchQuery]);
 
@@ -87,6 +93,7 @@ React.useEffect(() => {
       <MapDisplay
         mapValue={mapValue}
       />}
+      {/* CREATE A SIDEBAR TO DISPLAY PREVIOUS SEARCH RESULTS WITH A ONCLICK TO SHOW RESULTS ON MAP-DISPLAY */}
     </div>
   );
 }
