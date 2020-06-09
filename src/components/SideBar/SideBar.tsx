@@ -37,7 +37,7 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
     React.useEffect( () => {
         getSearchResults()
     }, [])
-    
+
     const getSearchResults = () => {
         
       firebase.db.collection('results').get()
@@ -59,14 +59,16 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
       })
     }
 
-    const renderKeywords = searchData.map((data) => (
-        <ListItem button key={data.id}>
-            <Typography>
-                {data.keyword}
-            </Typography>
-        </ListItem>
+    const clickHandler = (event: React.MouseEvent<{ id: string }>) => {
+        console.log(event.currentTarget.id)
+    } 
 
-    ))
+    const renderKeywords = searchData.map((data) =>(
+                                <ListItem button key={data.id} >
+                                        <Typography id={data.id}  onClick={clickHandler}>
+                                        {data.keyword}
+                                    </Typography>
+                                </ListItem>))
 
     return (
         <ExpansionPanel>
