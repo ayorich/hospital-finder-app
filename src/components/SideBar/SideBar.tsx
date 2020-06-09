@@ -29,38 +29,38 @@ interface Props {
 
 
 const SideBar: React.FunctionComponent<Props> = (props) => {
-    // const rows = props.mapValue;
+    const setmapValue = props.setmapValue;
+    const setSpinner = props.setSpinner;
     const classes = useStyles();
     const [searchData, setsearchData] = React.useState<any[]>([]);
 
 
-    React.useEffect( () => {
-        getSearchResults()
-    }, [])
-
-    const getSearchResults = () => {
-        
-      firebase.db.collection('results').get()
-        .then(querySnapshot => {
-            const docData :any[] = [];
-        querySnapshot.forEach( doc => {
-            docData.push({ 
-                id: doc.id, 
-                // keyword: doc.data().keyword,
-                // will use `` later for keyword variable
-                keyword: "South Shore Women's and Children's Hospital"
+   
+    React.useEffect(() => {
+        //LISTEN AND UPDATE
+    firebase.db.collection("results")
+        .onSnapshot(querySnapshot => {
+            const docData: any[] = [];
+            querySnapshot.forEach(doc => {
+                docData.push({
+                    id: doc.id,
+                    keyword: doc.data().keyword,
+                })
             })
-            console.log(doc.data())
-        })
             setsearchData(docData)
-      })
-      .catch(err => {
-        alert(err.message)
-      })
-    }
+        })
 
+    }, [])
     const clickHandler = (event: React.MouseEvent<{ id: string }>) => {
-        console.log(event.currentTarget.id)
+        setSpinner(true);
+        firebase.db.collection('results')
+            .doc(`${event.currentTarget.id}`)
+            .get()
+            .then((docRef:any) => { 
+                setSpinner(false);
+                setmapValue(docRef.data().data)
+             })
+
     } 
 
     const renderKeywords = searchData.map((data) =>(
@@ -90,3 +90,35 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
 
 
 export default SideBar;
+
+
+
+
+
+
+ // React.useEffect( () => {
+
+    //     getSearchResults()
+    // }, [])
+
+    // const getSearchResults = () => {
+
+    //   firebase.db.collection('results').get()
+    //     .then(querySnapshot => {
+    //         const docData :any[] = [];
+    //     querySnapshot.forEach( doc => {
+    //         docData.push({ 
+    //             id: doc.id, 
+    //             // keyword: doc.data().keyword,
+    //             // will use `` later for keyword variable
+    //             keyword: "South Shore Women's and Children's Hospital"
+    //         })
+    //         console.log(doc.data())
+    //     })
+    //         setsearchData(docData)
+    //   })
+    //   .catch(err => {
+    //     alert(err.message)
+    //   })
+    // }
+

@@ -69,7 +69,7 @@ const App: React.FC = (): JSX.Element => {
   }, []);
 
 React.useEffect(() => {
-  
+ 
   // let key = "AIzaSyBFvfsWl8OqrjOBovRkQ0s7Q_ijbxJx6dk";
   let key = process.env.REACT_APP_API_MAP_KEY;
   let lat: number;
@@ -93,12 +93,9 @@ React.useEffect(() => {
         setSpinner(false);
         setmapValue(res.data.results);
         data=res.data.results;
-        // console.log(res.data.results);
-        console.log(firebase.db);
 
       })
       .then(res =>{ 
-        console.log(data)
         if(data){
           //USE THE SEARCH KEYWORD AS kewrd:data or we create { kw : hello, data:[....{dfgg}] 
           firebase.db.collection('results').add({
