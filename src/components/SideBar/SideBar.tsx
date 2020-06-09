@@ -35,10 +35,10 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
     const [searchData, setsearchData] = React.useState<any[]>([]);
 
 
-   
+    
     React.useEffect(() => {
         //LISTEN AND UPDATE
-    firebase.db.collection("results")
+        firebase.db.collection("results").orderBy("date", "desc").limit(10)
         .onSnapshot(querySnapshot => {
             const docData: any[] = [];
             querySnapshot.forEach(doc => {

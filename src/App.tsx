@@ -97,13 +97,11 @@ React.useEffect(() => {
       })
       .then(res =>{ 
         if(data){
-          //USE THE SEARCH KEYWORD AS kewrd:data or we create { kw : hello, data:[....{dfgg}] 
+          const date = Date.now()
           firebase.db.collection('results').add({
             keyword,
+            date,
             data
-          })
-          .then(documentReference => {
-            console.log('document reference ID', documentReference.id)
           })
           .catch(error => {
             alert(error.message)
@@ -112,7 +110,6 @@ React.useEffect(() => {
 
           }
         );
-    //call a function to store recent data in firestore .then()
   }
 }, [radiusValue, locationValue, searchQuery]);
 
