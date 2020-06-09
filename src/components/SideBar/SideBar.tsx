@@ -31,24 +31,42 @@ interface Props {
 const SideBar: React.FunctionComponent<Props> = (props) => {
     // const rows = props.mapValue;
     const classes = useStyles();
+    const [searchData, setsearchData] = React.useState<any[]>([]);
+
 
     React.useEffect( () => {
         getSearchResults()
     }, [])
+    
     const getSearchResults = () => {
-        let tested : any;
+        
       firebase.db.collection('results').get()
         .then(querySnapshot => {
+            const docData :any[] = [];
         querySnapshot.forEach( doc => {
-            tested = doc.data().keyword;
-            console.log(tested)
+            docData.push({ 
+                id: doc.id, 
+                // keyword: doc.data().keyword,
+                // will use `` later for keyword variable
+                keyword: "South Shore Women's and Children's Hospital"
+            })
             console.log(doc.data())
         })
+            setsearchData(docData)
       })
       .catch(err => {
-        console.log(err.message)
+        alert(err.message)
       })
     }
+
+    const renderKeywords = searchData.map((data) => (
+        <ListItem button key={data.id}>
+            <Typography>
+                {data.keyword}
+            </Typography>
+        </ListItem>
+
+    ))
 
     return (
         <ExpansionPanel>
@@ -60,21 +78,7 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
                 <Typography className={classes.heading}>RECENTLY SEARCHED RESULTS</Typography>
             </ExpansionPanelSummary>
             <List component="nav" aria-label="secondary mailbox folders">
-                <ListItem button >
-                    <Typography>
-                        South Shore Women's and Children's Hospital
-                    </Typography>
-                </ListItem>
-                <ListItem button >
-                    <Typography>
-                        South Shore Women's and Children's Hospital
-                    </Typography>
-                </ListItem>
-                <ListItem button >
-                    <Typography>
-                        South Shore Women's and Children's Hospital
-                    </Typography>
-                </ListItem>
+                {renderKeywords}
             </List>
             
         </ExpansionPanel>
