@@ -76,7 +76,7 @@ React.useEffect(() => {
   let long: number;
   let radius : any ;
   let keyword :any;
-  let data :any[];
+  let data :any;
   if (locationValue && searchQuery) {
     setSpinner(true);
     radius = radiusValue * 1000;
@@ -93,10 +93,28 @@ React.useEffect(() => {
         setSpinner(false);
         setmapValue(res.data.results);
         data=res.data.results;
+        // console.log(res.data.results);
         console.log(firebase.db);
 
       })
-      .then(res => console.log(data));
+      .then(res =>{ 
+        console.log(data)
+        if(data){
+          //USE THE SEARCH KEYWORD AS kewrd:data or we create { kw : hello, data:[....{dfgg}] 
+          firebase.db.collection('results').add({
+            keyword,
+            data
+          })
+          .then(documentReference => {
+            console.log('document reference ID', documentReference.id)
+          })
+          .catch(error => {
+            alert(error.message)
+          })
+        }
+
+          }
+        );
     //call a function to store recent data in firestore .then()
   }
 }, [radiusValue, locationValue, searchQuery]);

@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import firebase from '../../firebaseConfig';
+
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -29,6 +31,25 @@ interface Props {
 const SideBar: React.FunctionComponent<Props> = (props) => {
     // const rows = props.mapValue;
     const classes = useStyles();
+
+    React.useEffect( () => {
+        getSearchResults()
+    }, [])
+    const getSearchResults = () => {
+        let tested : any;
+      firebase.db.collection('results').get()
+        .then(querySnapshot => {
+        querySnapshot.forEach( doc => {
+            tested = doc.data().keyword;
+            console.log(tested)
+            console.log(doc.data())
+        })
+      })
+      .catch(err => {
+        console.log(err.message)
+      })
+    }
+
     return (
         <ExpansionPanel>
             <ExpansionPanelSummary
