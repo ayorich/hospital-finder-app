@@ -81,7 +81,6 @@ const App: React.FC = (): JSX.Element => {
     let keyword :any;
     let data :any;
     if (locationValue && debounceSearchTerm) {
-      console.log(debounceSearchTerm )
       setSpinner(true);
 
       radius = radiusValue * 1000;
