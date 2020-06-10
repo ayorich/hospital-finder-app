@@ -59,7 +59,9 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
             .then((docRef:any) => { 
                 setSpinner(false);
                 setmapValue(docRef.data().data)
-             })
+            }).catch(error => {
+                alert(error.message)
+            })
 
     } 
 

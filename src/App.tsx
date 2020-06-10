@@ -5,9 +5,13 @@ import HeaderBar from './components/HeaderBar/HeaderBar';
 import MapDisplay from './components/mapDisplay/mapDisplay';
 import SideBar from './components/SideBar/SideBar';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Grid from '@material-ui/core/Grid';
+import useDebounce from './use-debounce';
+
+
 import firebase from './firebaseConfig';
 
-import Grid from '@material-ui/core/Grid';
+
 import './App.css';
 
 
@@ -43,7 +47,7 @@ const App: React.FC = (): JSX.Element => {
   const [mapValue, setmapValue] = React.useState();
   const [spinner, setSpinner] = React.useState(false);
   
-
+  const debounceSearchTerm = useDebounce(searchQuery, 500)
 
   React.useEffect(() => {
     let location;
@@ -68,50 +72,50 @@ const App: React.FC = (): JSX.Element => {
     
   }, []);
 
-React.useEffect(() => {
- 
-  // let key = "AIzaSyBFvfsWl8OqrjOBovRkQ0s7Q_ijbxJx6dk";
-  let key = process.env.REACT_APP_API_MAP_KEY;
-  let lat: number;
-  let long: number;
-  let radius : any ;
-  let keyword :any;
-  let data :any;
-  if (locationValue && searchQuery) {
-    setSpinner(true);
-    radius = radiusValue * 1000;
-    lat = locationValue.latitude;
-    long = locationValue.longitude;
-    
-    keyword = searchQuery;
-    
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${long}&radius=${radius}&type=hospital&keyword=${keyword}&key=${key}`;
-    axios
-      .get(proxyurl + url)
-      .then((res) => {
-        setSpinner(false);
-        setmapValue(res.data.results);
-        data=res.data.results;
 
-      })
-      .then(res =>{ 
-        if(data){
-          const date = Date.now()
-          firebase.db.collection('results').add({
-            keyword,
-            date,
-            data
-          })
-          .catch(error => {
-            alert(error.message)
-          })
-        }
+  React.useEffect(() => {
+    let key = process.env.REACT_APP_API_MAP_KEY;
+    let lat: number;
+    let long: number;
+    let radius : any ;
+    let keyword :any;
+    let data :any;
+    if (locationValue && debounceSearchTerm) {
+      console.log(debounceSearchTerm )
+      setSpinner(true);
 
+      radius = radiusValue * 1000;
+      lat = locationValue.latitude;
+      long = locationValue.longitude;
+      keyword = debounceSearchTerm;
+
+      const proxyurl = "https://cors-anywhere.herokuapp.com/";
+      const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${long}&radius=${radius}&type=hospital&keyword=${keyword}&key=${key}`;
+      axios
+        .get(proxyurl + url)
+        .then((res) => {
+          setSpinner(false);
+          setmapValue(res.data.results);
+          data=res.data.results;
+
+        })
+        .then(res =>{ 
+          if(data){
+            const date = Date.now()
+            firebase.db.collection('results').add({
+              keyword,
+              date,
+              data
+            })
+            .catch(error => {
+              alert(error.message)
+            })
           }
-        );
-  }
-}, [radiusValue, locationValue, searchQuery]);
+
+            }
+          );
+    }
+  }, [radiusValue, locationValue, debounceSearchTerm]);
 
   return (
     <div className="App">
@@ -135,7 +139,6 @@ React.useEffect(() => {
           />
          </Grid>
       </Grid>
-      {/* CREATE A SIDEBAR TO DISPLAY PREVIOUS SEARCH RESULTS WITH A ONCLICK TO SHOW RESULTS ON MAP-DISPLAY */}
     </div>
   );
 }
