@@ -47,7 +47,7 @@ const App: React.FC = (): JSX.Element => {
   const [mapValue, setmapValue] = React.useState();
   const [spinner, setSpinner] = React.useState(false);
   
-  const debounceSearchTerm = useDebounce(searchQuery, 500)
+  const debounceSearchTerm =  useDebounce(searchQuery, 500);
 
   React.useEffect(() => {
     let location;
@@ -98,21 +98,19 @@ const App: React.FC = (): JSX.Element => {
           data=res.data.results;
 
         })
-        .then(res =>{ 
-          if(data){
+        .then(res =>{
+          if(data.length > 0){
             const date = Date.now()
             firebase.db.collection('results').add({
               keyword,
               date,
               data
             })
-            .catch(error => {
-              alert(error.message)
-            })
           }
-
-            }
-          );
+            })
+      .catch(error => {
+        alert(error.message)
+      });
     }
   }, [radiusValue, locationValue, debounceSearchTerm]);
 
