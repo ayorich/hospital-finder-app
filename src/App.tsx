@@ -5,7 +5,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 
 import HeaderBar from "./components/HeaderBar/HeaderBar";
-import MapDisplay from "./components/mapDisplay/mapDisplay";
+import TableDisplay from "./components/mapDisplay/TableDisplay";
 import SideBar from "./components/SideBar/SideBar";
 import GoogleMap from "./components/mapDisplay/googleMap";
 import useDebounce from './use-debounce';
@@ -49,7 +49,8 @@ const App: React.FC = (): JSX.Element => {
   const [mapValue, setmapValue] = React.useState();
   const [spinner, setSpinner] = React.useState(false);
   
-  const debounceSearchTerm =  useDebounce(searchQuery, 800);
+  const debounceSearchTerm =  useDebounce(searchQuery, 500);
+
 
   React.useEffect(() => {
     let location;
@@ -123,7 +124,6 @@ const App: React.FC = (): JSX.Element => {
         radiusValue={radiusValue}
         setRadiusValue={setRadiusValue}
         setsearchQuery={setsearchQuery}
-        searchQuery={searchQuery}
       />
       <Grid container spacing={2}>
         <Grid item xs={9}>
@@ -142,7 +142,7 @@ const App: React.FC = (): JSX.Element => {
           {spinner ? (
             <CircularProgress className={classes.spinner} />
           ) : (
-            <MapDisplay mapValue={mapValue} />
+            <TableDisplay mapValue={mapValue} />
           )}
         </Grid>
       </Grid>

@@ -30,7 +30,7 @@ const useStyles = makeStyles({
         mapValue:any;
     }
 
-    const DisplayMaps: React.FunctionComponent<Props> = (props) => {
+    const TableDisplay: React.FunctionComponent<Props> = (props) => {
         const rows = props.mapValue;
     const classes = useStyles();
 
@@ -65,4 +65,4 @@ const useStyles = makeStyles({
 }
 
 
-export default DisplayMaps;
+export default TableDisplay;

@@ -43,7 +43,6 @@ interface Props {
   radiusValue:any;
   setRadiusValue:any;
   setsearchQuery:any;
-  searchQuery:any;
 }
 
 const PrimarySearchAppBar: React.FunctionComponent<Props> = (Props) => {
@@ -51,7 +50,6 @@ const PrimarySearchAppBar: React.FunctionComponent<Props> = (Props) => {
     const radiusValue  = Props.radiusValue;
     const setRadiusValue = Props.setRadiusValue;
     const setsearchQuery = Props.setsearchQuery;
-  const searchQuery = Props.searchQuery;
 
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -70,8 +68,6 @@ const PrimarySearchAppBar: React.FunctionComponent<Props> = (Props) => {
             id="free-solo-demo"
             freeSolo
             options={options}
-            value={searchQuery}
-            inputValue={searchQuery || " "}
             onInputChange={(event, newInputValue) => {
               setsearchQuery(newInputValue);
             }}
