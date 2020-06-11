@@ -67,8 +67,8 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
     } 
 
     const renderKeywords = searchData.map((data) => (
-      <ListItem button key={data.id} onClick={clickHandler}>
-        <Typography id={data.id}>{data.keyword}</Typography>
+      <ListItem button key={data.id} id={data.id} onClick={clickHandler}>
+        <Typography >{data.keyword}</Typography>
       </ListItem>
     ));
 

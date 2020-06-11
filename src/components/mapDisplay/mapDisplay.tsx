@@ -35,30 +35,33 @@ const useStyles = makeStyles({
     const classes = useStyles();
 
     return (
-        <TableContainer component={Paper}>
-            {rows ?<Table className={classes.table} aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>NAME</TableCell>
-                        <TableCell align="right">Rating</TableCell>
-                        <TableCell align="right">Total rating</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                     {rows.map((row:any) => (
-                        <TableRow key={row.id}>
-                            <TableCell component="th" scope="row">
-                                {row.name}
-                            </TableCell>
-                            <TableCell align="right">{row.rating}</TableCell>
-                            <TableCell align="right">{row.user_ratings_total}</TableCell>
-                        </TableRow>
-                    )) }
-                </TableBody>
-            </Table>: null} 
-        </TableContainer>
-                
-  );
+      <TableContainer component={Paper}>
+        {rows ? (
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>NAME</TableCell>
+                <TableCell align="right">vicinity</TableCell>
+                <TableCell align="right">Rating</TableCell>
+                <TableCell align="right">Total rating</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row: any) => (
+                <TableRow key={row.id}>
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="right">{row.vicinity}</TableCell>
+                  <TableCell align="right">{row.rating}</TableCell>
+                  <TableCell align="right">{row.user_ratings_total}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        ) : null}
+      </TableContainer>
+    );
 }
 
 
