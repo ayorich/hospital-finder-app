@@ -8,14 +8,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
-
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     grow: {
       flexGrow: 1,
     },
-    
+
     title: {
       display: "none",
       marginRight: "120px",
@@ -24,17 +24,21 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     formControl: {
-      margin: theme.spacing(1),
+      margin: "5.5px 10px 0",
       minWidth: 120,
       backgroundColor: "white",
     },
+    autocomplete: {
+      minWidth: 400,
+      margin: "0 10px",
+    },
     inputInput: {
-      width: "30%",
+      width: "100%",
       backgroundColor: "white",
     },
   })
 );
-
+const options = [ "Hospitals", "Pharmacies", "Clinics" , "Medical Offices"];
 interface Props {
   radiusValue:any;
   setRadiusValue:any;
@@ -48,13 +52,12 @@ const PrimarySearchAppBar: React.FunctionComponent<Props> = (Props) => {
     const setRadiusValue = Props.setRadiusValue;
     const setsearchQuery = Props.setsearchQuery;
   const searchQuery = Props.searchQuery;
-  
+
+
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setRadiusValue(event.target.value);
   };
-  const queryhandle = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setsearchQuery(event.target.value );
-  };
+  
   
   return (
     <div className={classes.grow}>
@@ -63,15 +66,27 @@ const PrimarySearchAppBar: React.FunctionComponent<Props> = (Props) => {
           <Typography className={classes.title} variant="h6" noWrap>
             Hospital Finder
           </Typography>
-            <TextField 
-            id="outlined-search" 
-            label="search locations"
-            variant="outlined"
-            type="text"
+          <Autocomplete
+            id="free-solo-demo"
+            freeSolo
+            options={options}
             value={searchQuery}
-            className={classes.inputInput}
-            onChange={queryhandle}
-            />
+            inputValue={searchQuery || " "}
+            onInputChange={(event, newInputValue) => {
+              setsearchQuery(newInputValue);
+            }}
+            className={classes.autocomplete}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="search locations"
+                margin="normal"
+                variant="outlined"
+                className={classes.inputInput}
+              />
+            )}
+          />
+
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
               Radius

@@ -13,7 +13,6 @@ const googleMap: React.FunctionComponent<Props> = (props) =>{
         const lng : number  = props.lng;
         const zoom :number = 12;
         const mapDetails = props.mapValue;
-        console.log(mapDetails);
 const getMapOptions = (maps: any) => {
   return {
     disableDefaultUI: true,

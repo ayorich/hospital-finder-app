@@ -49,7 +49,7 @@ const App: React.FC = (): JSX.Element => {
   const [mapValue, setmapValue] = React.useState();
   const [spinner, setSpinner] = React.useState(false);
   
-  const debounceSearchTerm =  useDebounce(searchQuery, 500);
+  const debounceSearchTerm =  useDebounce(searchQuery, 800);
 
   React.useEffect(() => {
     let location;
