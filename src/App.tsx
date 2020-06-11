@@ -1,11 +1,13 @@
 import React from 'react';
 import axios from "axios";
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import HeaderBar from './components/HeaderBar/HeaderBar';
-import MapDisplay from './components/mapDisplay/mapDisplay';
-import SideBar from './components/SideBar/SideBar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
+
+import HeaderBar from "./components/HeaderBar/HeaderBar";
+import MapDisplay from "./components/mapDisplay/mapDisplay";
+import SideBar from "./components/SideBar/SideBar";
+import GoogleMap from "./components/mapDisplay/googleMap";
 import useDebounce from './use-debounce';
 
 
@@ -109,6 +111,7 @@ const App: React.FC = (): JSX.Element => {
           }
             })
       .catch(error => {
+        setSpinner(false);
         alert(error.message)
       });
     }
@@ -124,17 +127,24 @@ const App: React.FC = (): JSX.Element => {
       />
       <Grid container spacing={2}>
         <Grid item xs={9}>
-          {spinner ? <CircularProgress className={classes.spinner} /> :
-            <MapDisplay
+          {locationValue ? (
+            <GoogleMap
+              lat={locationValue.latitude}
+              lng={locationValue.longitude}
               mapValue={mapValue}
-            />}
+            />
+          ) : null}
         </Grid>
         <Grid item xs={3}>
-          <SideBar
-            setmapValue={setmapValue}
-            setSpinner={setSpinner}
-          />
-         </Grid>
+          <SideBar setmapValue={setmapValue} setSpinner={setSpinner} />
+        </Grid>
+        <Grid item xs={9}>
+          {spinner ? (
+            <CircularProgress className={classes.spinner} />
+          ) : (
+            <MapDisplay mapValue={mapValue} />
+          )}
+        </Grid>
       </Grid>
     </div>
   );

@@ -60,17 +60,17 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
                 setSpinner(false);
                 setmapValue(docRef.data().data)
             }).catch(error => {
+                setSpinner(false);
                 alert(error.message)
             })
 
     } 
 
-    const renderKeywords = searchData.map((data) =>(
-                                <ListItem button key={data.id} >
-                                        <Typography id={data.id}  onClick={clickHandler}>
-                                        {data.keyword}
-                                    </Typography>
-                                </ListItem>))
+    const renderKeywords = searchData.map((data) => (
+      <ListItem button key={data.id} onClick={clickHandler}>
+        <Typography id={data.id}>{data.keyword}</Typography>
+      </ListItem>
+    ));
 
     return (
         <ExpansionPanel>
@@ -98,29 +98,4 @@ export default SideBar;
 
 
 
- // React.useEffect( () => {
-
-    //     getSearchResults()
-    // }, [])
-
-    // const getSearchResults = () => {
-
-    //   firebase.db.collection('results').get()
-    //     .then(querySnapshot => {
-    //         const docData :any[] = [];
-    //     querySnapshot.forEach( doc => {
-    //         docData.push({ 
-    //             id: doc.id, 
-    //             // keyword: doc.data().keyword,
-    //             // will use `` later for keyword variable
-    //             keyword: "South Shore Women's and Children's Hospital"
-    //         })
-    //         console.log(doc.data())
-    //     })
-    //         setsearchData(docData)
-    //   })
-    //   .catch(err => {
-    //     alert(err.message)
-    //   })
-    // }
 
