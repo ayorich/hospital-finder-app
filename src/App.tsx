@@ -113,7 +113,7 @@ const App: React.FC = (): JSX.Element => {
             })
       .catch(error => {
         setSpinner(false);
-        alert(error.message)
+        alert("NETWORK ERROR!!! PLEASE RETRY")
       });
     }
   }, [radiusValue, locationValue, debounceSearchTerm]);

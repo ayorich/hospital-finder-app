@@ -38,7 +38,8 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
     
     React.useEffect(() => {
         //LISTEN AND UPDATE
-        firebase.db.collection("results").orderBy("date", "desc").limit(10)
+        // ORDER RESULT BY DATE AND LIMIT QUERY TO ONLY 9 RESULT
+        firebase.db.collection("results").orderBy("date", "desc").limit(9)
         .onSnapshot(querySnapshot => {
             const docData: any[] = [];
             querySnapshot.forEach(doc => {
@@ -51,6 +52,8 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
         })
 
     }, [])
+
+
     const clickHandler = (event: React.MouseEvent<{ id: string }>) => {
         setSpinner(true);
         firebase.db.collection('results')
@@ -61,7 +64,7 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
                 setmapValue(docRef.data().data)
             }).catch(error => {
                 setSpinner(false);
-                alert(error.message)
+                alert("NETWORK ERROR!!! PLEASE RETRY");
             })
 
     } 

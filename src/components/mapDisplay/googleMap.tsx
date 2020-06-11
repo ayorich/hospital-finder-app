@@ -29,7 +29,7 @@ const getMapOptions = (maps: any) => {
 };
 
     return (
-      <div style={{ height: "65vh", width: "100%" }}>
+      <div style={{ height: "75vh", width: "100%" }}>
         <GoogleMapReact
           bootstrapURLKeys={{
             key: process.env.REACT_APP_API_MAP_KEY as string,
