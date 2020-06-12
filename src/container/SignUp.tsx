@@ -65,10 +65,7 @@ interface signUp{
     passwordTwo: string,
     error: any,
 }
-interface password{
-    passwordOne: string,
-    passwordTwo : string,
-}
+
 const SignUp: React.FunctionComponent<Props> = (props) => {
 
   const classes = useStyles();
