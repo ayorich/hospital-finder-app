@@ -1,5 +1,6 @@
 import firebase from 'firebase/app'
 import "firebase/firestore";
+import "firebase/auth";
 
 firebase.initializeApp({
   apiKey: process.env.REACT_APP_API_KEY,
@@ -12,9 +13,20 @@ firebase.initializeApp({
   measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 });
 
+
+
 let db = firebase.firestore();
+let auth = firebase.auth();
+const doCreateUserWithEmailAndPassword = (email :any, password : any) =>
+  auth.createUserWithEmailAndPassword(email, password);
+const doSignInWithEmailAndPassword = (email :any, password :any) =>
+  auth.signInWithEmailAndPassword(email, password);
+const doSignOut = () => auth.signOut();
 
 export default {
   firebase,
   db,
+  doCreateUserWithEmailAndPassword,
+  doSignInWithEmailAndPassword,
+  doSignOut,
 };
