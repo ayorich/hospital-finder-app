@@ -17,6 +17,8 @@ import firebase from '../firebaseConfig';
 
 
 
+
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
@@ -40,8 +42,10 @@ interface latlong {
     latitude: number;
     longitude: number;
 }
-
-const Home: React.FC = (): JSX.Element => {
+interface Props{
+    history: any,
+}
+const Home: React.FC<Props> = (props): JSX.Element => {
     const classes = useStyles();
     const [locationValue, setLocationValue] = React.useState<latlong>();
     const [searchQuery, setsearchQuery] = React.useState('');
@@ -50,7 +54,6 @@ const Home: React.FC = (): JSX.Element => {
     const [spinner, setSpinner] = React.useState(false);
 
     const debounceSearchTerm = useDebounce(searchQuery, 500);
-
 
     React.useEffect(() => {
         let location;
@@ -74,6 +77,8 @@ const Home: React.FC = (): JSX.Element => {
         }
 
     }, []);
+
+    
 
 
     React.useEffect(() => {

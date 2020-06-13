@@ -26,6 +26,7 @@ const doSignOut = () => auth.signOut();
 export default {
   firebase,
   db,
+  auth,
   doCreateUserWithEmailAndPassword,
   doSignInWithEmailAndPassword,
   doSignOut,

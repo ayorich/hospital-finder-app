@@ -9,6 +9,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import SignOut from "../../container/SignOut"
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -102,6 +103,7 @@ const PrimarySearchAppBar: React.FunctionComponent<Props> = (Props) => {
               <MenuItem value={50}>50KM</MenuItem>
             </Select>
           </FormControl>
+          <SignOut/>
         </Toolbar>
       </AppBar>
     </div>

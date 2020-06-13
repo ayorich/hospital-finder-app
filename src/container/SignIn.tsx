@@ -105,7 +105,7 @@ const SignIn: React.FunctionComponent<Props> = (props) => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Sign in
         </Typography>
         {error && <p>{error.message}</p>}
         <form onSubmit={onSubmit} className={classes.form} noValidate>
