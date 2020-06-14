@@ -70,10 +70,10 @@ const SignIn: React.FunctionComponent<Props> = (props) => {
   const onSubmit = (event: any) => {
     console.log(email, password);
     firebase.doSignInWithEmailAndPassword(email, password)
-            .then(() => {
+      .then((authUser) => {
               setsignState({ ...INITIAL_STATE });
               props.history.push(ROUTES.HOME);
-              console.log('success')
+        // console.log(authUser.uid)
             })
       .catch((error: any) => {
         setsignState({

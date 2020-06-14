@@ -31,3 +31,6 @@ export default {
   doSignInWithEmailAndPassword,
   doSignOut,
 };
+// // uidfirebase.auth.onAuthStateChanged((authUser: any) => {
+// userID = authUser.uid
+//                         })

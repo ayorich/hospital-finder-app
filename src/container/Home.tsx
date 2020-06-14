@@ -12,6 +12,7 @@ import useDebounce from '../use-debounce';
 
 
 import firebase from '../firebaseConfig';
+import { v5 as uuidv5 } from 'uuid';
 
 
 
@@ -44,7 +45,11 @@ interface latlong {
 }
 interface Props{
     history: any,
+    // userState: any
 }
+const MY_NAMESPACE = '1b671a64-40d5-491e-99b0-da01ff1f3341';
+const keyGen = uuidv5('Get_Key', MY_NAMESPACE); 
+
 const Home: React.FC<Props> = (props): JSX.Element => {
     const classes = useStyles();
     const [locationValue, setLocationValue] = React.useState<latlong>();
@@ -55,6 +60,11 @@ const Home: React.FC<Props> = (props): JSX.Element => {
 
     const debounceSearchTerm = useDebounce(searchQuery, 500);
 
+    
+
+
+   
+    
     React.useEffect(() => {
         let location;
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -88,9 +98,14 @@ const Home: React.FC<Props> = (props): JSX.Element => {
         let radius: any;
         let keyword: any;
         let data: any;
+        let userID: string;
+
+        firebase.auth.onAuthStateChanged((authUser: any) => {
+            userID = authUser.uid
+        })
         if (locationValue && debounceSearchTerm) {
             setSpinner(true);
-
+            console.log('am inside query')
             radius = radiusValue * 1000;
             lat = locationValue.latitude;
             long = locationValue.longitude;
@@ -108,11 +123,14 @@ const Home: React.FC<Props> = (props): JSX.Element => {
                 })
                 .then(res => {
                     if (data.length > 0) {
+                        console.log(keyGen);
                         const date = Date.now()
                         firebase.db.collection('results').add({
                             keyword,
                             date,
-                            data
+                            userID,
+                            data,
+                            docID: keyGen,
                         })
                     }
                 })

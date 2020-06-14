@@ -14,10 +14,12 @@ import './App.css';
 
 const App: React.FC = (): JSX.Element => {
   const [authState, setauthState] = React.useState(false);
+  // const [userState, setuserState] = React.useState('');
 
   React.useEffect(() => {
     firebase.auth.onAuthStateChanged((authUser: any) => {
-      console.log(authUser)
+      console.log(authUser.uid)
+      // setuserState(authUser.uid)
       if(authUser) setauthState(true)
       
     })}, [])
