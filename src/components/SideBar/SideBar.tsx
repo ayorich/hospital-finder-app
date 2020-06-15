@@ -70,7 +70,7 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
                                         }
                                     }`
 
-// SETS THE USER ID AND UNSUBSCRIBE
+//SETS THE USER ID AND UNSUBSCRIBE
   React.useEffect(() => {
       firebase.auth.onAuthStateChanged((authUser: any) => {
         setuserState(authUser.uid)
@@ -86,9 +86,9 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
 
     
  
-//QUERIES THE GRAPHQL API AND UPDATES THE SIDEBAR STATE
-  React.useEffect(() => {
-    axiosGraphQL
+
+  const clickData = () => {
+      axiosGraphQL
       .post("", {
         query: GET_DATA,
         variables: {
@@ -97,8 +97,10 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
       })
       .then((result: any) => {
         setsearchData(result.data.data.results);
-      });
-  }, [GET_DATA, userState]);
+      })
+      console.log('am clicked')
+
+  }
     
 // HANDLES THE ONCLICK EVENT FROM THE SIDEBAR LIST TO UPDATE THE DISPLAY TABLE AND MAP DATAS
   const clickHandler = (event: React.MouseEvent<{ id: string }>) => {
@@ -139,7 +141,7 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
       );});
 
   return (
-      <ExpansionPanel>
+    <ExpansionPanel onClick={clickData}>
           <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
