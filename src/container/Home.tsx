@@ -74,16 +74,16 @@ const Home: React.FC<Props> = (props): JSX.Element => {
             setLocationValue(location);
         });
 
-        if (navigator.geolocation) {
-            navigator.geolocation.watchPosition(function (position) {
-                location = {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude
+        // if (navigator.geolocation) {
+        //     navigator.geolocation.watchPosition(function (position) {
+        //         location = {
+        //             latitude: position.coords.latitude,
+        //             longitude: position.coords.longitude
 
-                }
-                setLocationValue(location);
-            })
-        }
+        //         }
+        //         setLocationValue(location);
+        //     })
+        // }
 
     }, []);
 

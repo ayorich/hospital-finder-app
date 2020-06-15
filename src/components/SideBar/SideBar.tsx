@@ -75,12 +75,7 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
       firebase.auth.onAuthStateChanged((authUser: any) => {
         setuserState(authUser.uid)
       })
-    const unsubscribe = firebase.auth.onAuthStateChanged((authUser: any) => {
-      setuserState('')
-    })
-    return () => {
-      unsubscribe();
-    }
+   
   },
     [])
 
@@ -97,6 +92,7 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
       })
       .then((result: any) => {
         setsearchData(result.data.data.results);
+        console.log(result.data.data.results, userState)
       })
 
   }
