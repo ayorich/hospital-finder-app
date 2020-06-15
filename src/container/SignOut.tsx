@@ -12,8 +12,9 @@ import * as ROUTES from "../constants/routes";
 
 
 const signOut = (props: any) => {
-  
+  // CLEAN STORAGE , SIGN OUT AND REDIRECTS
   const doSignOut = () => {
+    localStorage.removeItem('authUser')
     firebase.doSignOut();
     props.history.push(ROUTES.SIGN_IN);
 

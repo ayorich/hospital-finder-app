@@ -13,18 +13,25 @@ import './App.css';
 
 
 const App: React.FC = (): JSX.Element => {
-  const [authState, setauthState] = React.useState(false);
-  // const [userState, setuserState] = React.useState('');
+  const userdata :any = localStorage.getItem('authUser')
+  const user = JSON.parse(userdata)
+  const [authState, setauthState] = React.useState<any>(user);
 
+  // SETS USERSTATE AND PERSIST DATA IN LOCAL STORAGE ONMOUNT
   React.useEffect(() => {
     firebase.auth.onAuthStateChanged((authUser: any) => {
-      console.log(authUser.uid)
-      // setuserState(authUser.uid)
-      if(authUser) setauthState(true)
+      if(authUser){
+        localStorage.setItem('authUser', JSON.stringify(authUser))
+      }else{
+        localStorage.removeItem('authUser')
+      }
+      
+       setauthState(authUser)
       
     })}, [])
+
   
-  console.log(authState)
+  
   
   return (
     <Router>

@@ -1,6 +1,7 @@
 import React from "react";
 import "./Marker.css";
 
+// MARKERS FOR GOOGLE MAP
 const Marker = (props: any) => {
   const { color, name } = props;
   return (

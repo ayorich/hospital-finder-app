@@ -16,10 +16,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 
-
-
-
-
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
@@ -39,15 +35,15 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     }),
 );
+
 interface latlong {
     latitude: number;
     longitude: number;
 }
+
 interface Props{
     history: any,
-    // userState: any
 }
-// const MY_NAMESPACE = '1b671a64-40d5-491e-99b0-da01ff1f3341';
 
 
 const Home: React.FC<Props> = (props): JSX.Element => {
@@ -58,13 +54,15 @@ const Home: React.FC<Props> = (props): JSX.Element => {
     const [mapValue, setmapValue] = React.useState();
     const [spinner, setSpinner] = React.useState(false);
 
+    //DEBOUNCES SEARCHBAR INPUTS FOR 500ms TO AVOID SPAM QUERIES
     const debounceSearchTerm = useDebounce(searchQuery, 500);
-
+    //GETS USER DETAILS FROM LOCAL STORAGE
+    const userdata: any = localStorage.getItem('authUser')
     
 
 
    
-    
+    // GETS USER LOCATION AND WATCH FOR CHANGES
     React.useEffect(() => {
         let location;
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -75,6 +73,7 @@ const Home: React.FC<Props> = (props): JSX.Element => {
             }
             setLocationValue(location);
         });
+
         if (navigator.geolocation) {
             navigator.geolocation.watchPosition(function (position) {
                 location = {
@@ -92,38 +91,43 @@ const Home: React.FC<Props> = (props): JSX.Element => {
 
 
     React.useEffect(() => {
+
         let key = process.env.REACT_APP_API_MAP_KEY;
         let lat: number;
         let long: number;
         let radius: any;
         let keyword: any;
         let data: any;
-        let userID: string;
+        let userID:any;
 
-        firebase.auth.onAuthStateChanged((authUser: any) => {
-            userID = authUser.uid
-        })
+        if (userdata){
+             userID = JSON.parse(userdata).uid ;
+        }
+        
+        // IF LOCATION AND DEBOUNCE SEARCH IS TRUE
         if (locationValue && debounceSearchTerm) {
+            //SETS SPINNER TO TRUE
             setSpinner(true);
-            console.log('am inside query')
             radius = radiusValue * 1000;
             lat = locationValue.latitude;
             long = locationValue.longitude;
             keyword = debounceSearchTerm;
 
+            // QUERIES URL AND SETSTATE
             const proxyurl = "https://cors-anywhere.herokuapp.com/";
             const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${long}&radius=${radius}&type=hospital&keyword=${keyword}&key=${key}`;
             axios
                 .get(proxyurl + url)
                 .then((res) => {
+                    //SETS SPINNER FALSE AND SETSTATE VALUE FOR MAP AND TABLE DISPLAY
                     setSpinner(false);
                     setmapValue(res.data.results);
                     data = res.data.results;
 
                 })
                 .then(res => {
+                    //IF DATA.LENGTH>0 EQUALS TRUE GENERATES DOCID, TIMESTAMP AND POST TO DATABASE
                     if (data.length > 0) {
-                        // let keyGen = uuidv5("Get_Key", MY_NAMESPACE); 
                         let keyGen = uuidv4();
                         const date = Date.now()
                         firebase.db.collection('results').add({
@@ -136,11 +140,12 @@ const Home: React.FC<Props> = (props): JSX.Element => {
                     }
                 })
                 .catch(error => {
+                    //SETS SPINNER FALSE AND CATCH ,ALERT ERROR
                     setSpinner(false);
                     alert("NETWORK ERROR!!! PLEASE RETRY")
                 });
         }
-    }, [radiusValue, locationValue, debounceSearchTerm]);
+    }, [radiusValue, locationValue, debounceSearchTerm, userdata]);
 
     return (
         <React.Fragment>

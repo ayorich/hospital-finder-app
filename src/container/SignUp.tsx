@@ -18,7 +18,7 @@ import * as ROUTES from "../constants/routes";
 const Copyright = () => (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <a color="inherit" href="https://material-ui.com/">
+      <a color="inherit" href="https://enye.tech/">
         HOSPITAL FINDER
       </a>{' '}
       {new Date().getFullYear()}
@@ -72,26 +72,26 @@ const SignUp: React.FunctionComponent<Props> = (props) => {
   const [signState, setsignState] = React.useState<signUp>(INITIAL_STATE);
   const { email, passwordOne, passwordTwo, error } = signState;
 
-   const onSubmit = (event :any) => {
-            console.log(email, passwordOne);
-        firebase.doCreateUserWithEmailAndPassword(email, passwordOne)
-            .then((authUser) => {
-                //empty input values on success
-            setsignState({ ...signState });
-            props.history.push(ROUTES.HOME);
-            console.log(authUser);
-            })
-            .catch((error : any) => {
-            setsignState({
-                ...signState, error,
-            });
-            console.log(error);
+// SIGNS UP USER ,SET LOCAL STORAGE REDIRECT USER TO HOMEPAGE
+  const onSubmit = (event :any) => {
+      firebase.doCreateUserWithEmailAndPassword(email, passwordOne)
+          .then((authUser) => {
+            localStorage.setItem('authUser', JSON.stringify(authUser))
+            //empty input values on success
+          setsignState({ ...signState });
+          props.history.push(ROUTES.HOME);
+          })
+          .catch((error : any) => {
+          setsignState({
+              ...signState, error,
+          });
 
-            });
+          });
 
-        event.preventDefault();
-    };
+      event.preventDefault();
+  };
 
+// HANDLES INPUT VALUE FROM FORM INPUTS FIELD
 const handleChange = (event: React.ChangeEvent<{ value: unknown, name: string }>) => {
   setsignState({
     ...signState,
@@ -100,7 +100,7 @@ const handleChange = (event: React.ChangeEvent<{ value: unknown, name: string }>
 };
 
 
-
+// DISABLE SIGNUP BUTTON UNTIL REQUIREMENTS ARE REACHED
 const isInvalid = 
             passwordOne !== passwordTwo ||
             passwordOne === "" ||

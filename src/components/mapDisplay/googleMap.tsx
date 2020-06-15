@@ -8,25 +8,29 @@ interface Props {
   lng:number,
   mapValue:any
 }
+
 const googleMap: React.FunctionComponent<Props> = (props) =>{
-        const lat :number = props.lat;
-        const lng : number  = props.lng;
-        const zoom :number = 12;
-        const mapDetails = props.mapValue;
-const getMapOptions = (maps: any) => {
-  return {
-    disableDefaultUI: true,
-    mapTypeControl: true,
-    streetViewControl: true,
-    styles: [
-      {
-        featureType: "poi",
-        elementType: "labels",
-        stylers: [{ visibility: "on" }],
-      },
-    ],
-  };
-};
+  
+    const lat :number = props.lat;
+    const lng : number  = props.lng;
+    const zoom :number = 12;
+    const mapDetails = props.mapValue;
+
+    // GOOGLE MAP OPTIONS 
+    const getMapOptions = (maps: any) => {
+      return {
+        disableDefaultUI: true,
+        mapTypeControl: true,
+        streetViewControl: true,
+        styles: [
+          {
+            featureType: "poi",
+            elementType: "labels",
+            stylers: [{ visibility: "on" }],
+          },
+        ],
+      };
+    };
 
     return (
       <div style={{ height: "75vh", width: "100%" }}>

@@ -17,11 +17,15 @@ firebase.initializeApp({
 
 let db = firebase.firestore();
 let auth = firebase.auth();
+// CREATE USER
 const doCreateUserWithEmailAndPassword = (email :any, password : any) =>
   auth.createUserWithEmailAndPassword(email, password);
+// SIGN IN USER
 const doSignInWithEmailAndPassword = (email :any, password :any) =>
   auth.signInWithEmailAndPassword(email, password);
+//SIGN OUT USER
 const doSignOut = () => auth.signOut();
+
 
 export default {
   firebase,
@@ -30,7 +34,5 @@ export default {
   doCreateUserWithEmailAndPassword,
   doSignInWithEmailAndPassword,
   doSignOut,
+ 
 };
-// // uidfirebase.auth.onAuthStateChanged((authUser: any) => {
-// userID = authUser.uid
-//                         })

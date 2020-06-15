@@ -17,21 +17,14 @@ const useStyles = makeStyles({
 });
 
 
-/**
- * GOOGLE DATA EXTRACTED
-// id: "8b2aad7a50a1b54308c19c4502d7988b6dd03cce"
-// name: "Fremont Hotel & Casino"
-// place_id: "ChIJFTJhO6DDyIARYs7dJsDxK2Y"
-// rating: 4.3
-// user_ratings_total: 10701
-***/
+interface Props { 
+    mapValue:any;
+}
 
-    interface Props { 
-        mapValue:any;
-    }
 
-    const TableDisplay: React.FunctionComponent<Props> = (props) => {
-        const rows = props.mapValue;
+// RECIEVES TABLE DATA FROM HOME AND DISPLAYS IN ROWS
+const TableDisplay: React.FunctionComponent<Props> = (props) => {
+    const rows = props.mapValue;
     const classes = useStyles();
 
     return (
@@ -66,3 +59,16 @@ const useStyles = makeStyles({
 
 
 export default TableDisplay;
+
+
+
+
+
+/**
+ * GOOGLE DATA EXTRACTED
+// id: "8b2aad7a50a1b54308c19c4502d7988b6dd03cce"
+// name: "Fremont Hotel & Casino"
+// place_id: "ChIJFTJhO6DDyIARYs7dJsDxK2Y"
+// rating: 4.3
+// user_ratings_total: 10701
+***/

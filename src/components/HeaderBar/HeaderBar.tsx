@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: "5.5px 10px 0",
       minWidth: 120,
       backgroundColor: "white",
+      marginRight: "330px",
     },
     autocomplete: {
       minWidth: 400,
@@ -37,9 +38,15 @@ const useStyles = makeStyles((theme: Theme) =>
       width: "100%",
       backgroundColor: "white",
     },
+    signout: {
+      marginLeft: "120px",
+      
+    },
   })
 );
+
 const options = [ "Hospitals", "Pharmacies", "Clinics" , "Medical Offices"];
+
 interface Props {
   radiusValue:any;
   setRadiusValue:any;
@@ -52,7 +59,7 @@ const PrimarySearchAppBar: React.FunctionComponent<Props> = (Props) => {
     const setRadiusValue = Props.setRadiusValue;
     const setsearchQuery = Props.setsearchQuery;
 
-
+// HANDLES INPUT VALUE FROM SET RADIUS  AND SET ITS STATE
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setRadiusValue(event.target.value);
   };
@@ -103,7 +110,7 @@ const PrimarySearchAppBar: React.FunctionComponent<Props> = (Props) => {
               <MenuItem value={50}>50KM</MenuItem>
             </Select>
           </FormControl>
-          <SignOut/>
+          <SignOut className={classes.signout}/>
         </Toolbar>
       </AppBar>
     </div>

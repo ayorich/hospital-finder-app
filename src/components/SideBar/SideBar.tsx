@@ -10,7 +10,6 @@ import ListItem from '@material-ui/core/ListItem';
 import firebase from '../../firebaseConfig';
 import axios from "axios";
 
-// import ApolloClient, { gql } from "apollo-boost";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -33,17 +32,7 @@ const axiosGraphQL = axios.create({
     baseURL: 'https://cors-anywhere.herokuapp.com/https://us-central1-map-finder-3666f.cloudfunctions.net/graphql',
 });
 
-// const client = new ApolloClient({
-//   uri:
-    // "https://cors-anywhere.herokuapp.com/https://us-central1-map-finder-3666f.cloudfunctions.net/graphql",
-//   request: (operation) => {
-//     operation.setContext({
-//       headers: {
-//         authorization: `Bearer your-personal-access-token`,
-//       },
-//     });
-//   },
-// });
+
 
 const SideBar: React.FunctionComponent<Props> = (props) => {
     const setmapValue = props.setmapValue;
@@ -51,10 +40,8 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
     const classes = useStyles();
     const [searchData, setsearchData] = React.useState([]);
     const [userState, setuserState] = React.useState('');
-    // console.log(userState)
 
-
-
+// GRAPHQL QUERY FOR A USER DATA
     const GET_DATA = `
       query FeedSearchQuery($userID: ID!) {
         results(userID: $userID) {
@@ -64,6 +51,7 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
       }
     `;
 
+// GRAPHQL QUERY FOR A DOCUMENT DATA
     const GET_TABLE_DATA =`query FeedSearchQuery($docID: ID!){
                                     datas(docID:$docID){
                                         data{
@@ -82,16 +70,23 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
                                         }
                                     }`
 
-
-
-    React.useEffect(() => {
-        firebase.auth.onAuthStateChanged((authUser: any) => {
-        console.log(authUser)
+// SETS THE USER ID AND UNSUBSCRIBE
+  React.useEffect(() => {
+      firebase.auth.onAuthStateChanged((authUser: any) => {
         setuserState(authUser.uid)
-        
-        
-        })}, [])
+      })
+    const unsubscribe = firebase.auth.onAuthStateChanged((authUser: any) => {
+      setuserState('')
+    })
+    return () => {
+      unsubscribe();
+    }
+  },
+    [])
 
+    
+ 
+//QUERIES THE GRAPHQL API AND UPDATES THE SIDEBAR STATE
   React.useEffect(() => {
     axiosGraphQL
       .post("", {
@@ -101,65 +96,64 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
         },
       })
       .then((result: any) => {
-        //   console.log(result.data.data.results);
         setsearchData(result.data.data.results);
       });
   }, [GET_DATA, userState]);
     
+// HANDLES THE ONCLICK EVENT FROM THE SIDEBAR LIST TO UPDATE THE DISPLAY TABLE AND MAP DATAS
+  const clickHandler = (event: React.MouseEvent<{ id: string }>) => {
+      const docId = event.currentTarget.id;
+      // SETS SPINNER TO TRUE AND POST ITS REQUEST {QUERY, VARIABLES}
+      setSpinner(true);
+      axiosGraphQL
+        .post("", {
+          query: GET_TABLE_DATA,
+          variables: {
+            docID: `${docId}`,
+          },
+        })
+        .then((data: any) => {
+        // SETS SPINNER TO FALSE AND SETS MAP DATA VALUES
+          setSpinner(false);
+          setmapValue(data.data.data.datas[0].data);
+        })
+        .catch((error: any) => {
+        // SETS SPINNER TO FALSE AND ALERT ERRORS
+          setSpinner(false);
+          alert("NETWORK ERROR!!! PLEASE RETRY");
+        });
 
-    const clickHandler = (event: React.MouseEvent<{ id: string }>) => {
-        const docId =event.currentTarget.id;
-        console.log(docId)
-        setSpinner(true);
-        axiosGraphQL
-          .post("", {
-            query: GET_TABLE_DATA,
-            variables: {
-              docID: `${docId}`,
-            },
-          })
-          .then((data: any) => {
-            setSpinner(false);
-            console.log(data.data.data.datas[0].data);
-            setmapValue(data.data.data.datas[0].data);
-          })
-          .catch((error: any) => {
-            setSpinner(false);
-            alert("NETWORK ERROR!!! PLEASE RETRY");
-          });
-
-    } 
+  } 
     
+// RETURNS A LIST OF SEARCH DATAS FROM DATABASE AND PASS THE docID 
+  const renderKeywords = searchData.map((data :any, i) => {
+      return (
+        <ListItem
+          button
+          key={data.docID}
+          id={data.docID}
+          onClick={clickHandler}
+        >
+          <Typography>{data.keyword}</Typography>
+        </ListItem>
+      );});
 
-    const renderKeywords = searchData.map((data :any, i) => {
-        // console.log(data)
-        return (
-          <ListItem
-            button
-            key={data.docID}
-            id={data.docID}
-            onClick={clickHandler}
+  return (
+      <ExpansionPanel>
+          <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
           >
-            <Typography>{data.keyword}</Typography>
-          </ListItem>
-        );});
+              <Typography className={classes.heading}>RECENTLY SEARCHED RESULTS</Typography>
+          </ExpansionPanelSummary>
+          <List component="nav" aria-label="secondary mailbox folders">
+              {renderKeywords}
+          </List>
+          
+      </ExpansionPanel>
 
-    return (
-        <ExpansionPanel>
-            <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-            >
-                <Typography className={classes.heading}>RECENTLY SEARCHED RESULTS</Typography>
-            </ExpansionPanelSummary>
-            <List component="nav" aria-label="secondary mailbox folders">
-                {renderKeywords}
-            </List>
-            
-        </ExpansionPanel>
-
-        );
+      );
 }
 
 

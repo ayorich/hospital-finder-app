@@ -63,101 +63,106 @@ interface signIn {
 }
 
 const SignIn: React.FunctionComponent<Props> = (props) => {
-  const classes = useStyles();
-  const [signState, setsignState] = React.useState<signIn>(INITIAL_STATE);
-  const { email, password, error } = signState;
+    const classes = useStyles();
+    const [signState, setsignState] = React.useState<signIn>(INITIAL_STATE);
+    const { email, password, error } = signState;
 
-  const onSubmit = (event: any) => {
-    console.log(email, password);
-    firebase.doSignInWithEmailAndPassword(email, password)
-      .then((authUser) => {
-              setsignState({ ...INITIAL_STATE });
-              props.history.push(ROUTES.HOME);
-        // console.log(authUser.uid)
-            })
-      .catch((error: any) => {
-        setsignState({
-          ...signState,
-          error,
+    //ONSUBMIT HANDLES USER DATAS, FIREBASE VALIDATES
+    const onSubmit = (event: any) => {
+      firebase.doSignInWithEmailAndPassword(email, password)
+        .then((authUser) => {
+                //  LOCAL STORAGE 
+                localStorage.setItem('authUser', JSON.stringify(authUser))
+                //CLEAN USER INPUTS
+                setsignState({ ...INITIAL_STATE });
+                // REDIRECTS TO HOMEPAGE
+                props.history.push(ROUTES.HOME);
+
+              })
+        .catch((error: any) => {
+          // SETSTATE ERROR TRUE
+          setsignState({
+            ...signState,
+            error,
+          });
         });
-        console.log(error);
-      });
 
-    event.preventDefault();
-  };
+      event.preventDefault();
+    };
 
-  const handleChange = (
-    event: React.ChangeEvent<{ value: unknown; name: string }>
-  ) => {
-    setsignState({
-      ...signState,
-      [event.currentTarget.name]: event.target.value,
-    });
-  };
+    // HANDLES USER INPUTS
+    const handleChange = (event: React.ChangeEvent<{ value: unknown; name: string }>) => {
 
-  const isInvalid =  password === '' || email === '';
+            setsignState({
+              ...signState,
+              [event.currentTarget.name]: event.target.value,
+            });
+    };
 
-  return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        {error && <p>{error.message}</p>}
-        <form onSubmit={onSubmit} className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                onChange={handleChange}
-              />
+    // DISABLE FORM BUTTON
+    const isInvalid =  password === '' || email === '';
+
+    return (
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          {error && <p>{error.message}</p>}
+          <form onSubmit={onSubmit} className={classes.form} noValidate>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  onChange={handleChange}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                onChange={handleChange}
-              />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              disabled={isInvalid}
+            >
+              Sign In
+            </Button>
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Link to={ROUTES.SIGN_UP}>Don't have an account? Sign up</Link>
+              </Grid>
             </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            disabled={isInvalid}
-          >
-            Sign In
-          </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link to={ROUTES.SIGN_UP}>Don't have an account? Sign up</Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
-    </Container>
-  );
+          </form>
+        </div>
+        <Box mt={5}>
+          <Copyright />
+        </Box>
+      </Container>
+    );
 };
 
 export default withRouter(SignIn);
