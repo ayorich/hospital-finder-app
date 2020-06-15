@@ -22,7 +22,7 @@
     "apollo-boost": "^0.4.9",
     "autosuggest-highlight": "^3.1.1",
     "axios": "^0.19.2",
-    "firebase": "^7.2.2",
+    "firebase": "^7.15.1",
     "google-map-react": "^1.1.7",
     "graphql": "^15.1.0",
     "lodash": "^4.17.15",

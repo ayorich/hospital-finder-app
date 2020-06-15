@@ -70,7 +70,7 @@ const SignIn: React.FunctionComponent<Props> = (props) => {
     //ONSUBMIT HANDLES USER DATAS, FIREBASE VALIDATES
     const onSubmit = (event: any) => {
       firebase.doSignInWithEmailAndPassword(email, password)
-        .then((authUser) => {
+        .then((authUser:any) => {
                 //  LOCAL STORAGE 
                 localStorage.setItem('authUser', JSON.stringify(authUser))
                 //CLEAN USER INPUTS
