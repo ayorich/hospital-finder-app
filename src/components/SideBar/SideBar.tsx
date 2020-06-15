@@ -98,7 +98,6 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
       .then((result: any) => {
         setsearchData(result.data.data.results);
       })
-      console.log('am clicked')
 
   }
     
