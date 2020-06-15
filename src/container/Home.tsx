@@ -12,7 +12,7 @@ import useDebounce from '../use-debounce';
 
 
 import firebase from '../firebaseConfig';
-import { v5 as uuidv5 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -47,8 +47,8 @@ interface Props{
     history: any,
     // userState: any
 }
-const MY_NAMESPACE = '1b671a64-40d5-491e-99b0-da01ff1f3341';
-const keyGen = uuidv5('Get_Key', MY_NAMESPACE); 
+// const MY_NAMESPACE = '1b671a64-40d5-491e-99b0-da01ff1f3341';
+
 
 const Home: React.FC<Props> = (props): JSX.Element => {
     const classes = useStyles();
@@ -123,7 +123,8 @@ const Home: React.FC<Props> = (props): JSX.Element => {
                 })
                 .then(res => {
                     if (data.length > 0) {
-                        console.log(keyGen);
+                        // let keyGen = uuidv5("Get_Key", MY_NAMESPACE); 
+                        let keyGen = uuidv4();
                         const date = Date.now()
                         firebase.db.collection('results').add({
                             keyword,

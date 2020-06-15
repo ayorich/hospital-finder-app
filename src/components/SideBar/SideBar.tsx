@@ -10,6 +10,7 @@ import ListItem from '@material-ui/core/ListItem';
 import firebase from '../../firebaseConfig';
 import axios from "axios";
 
+// import ApolloClient, { gql } from "apollo-boost";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -32,6 +33,17 @@ const axiosGraphQL = axios.create({
     baseURL: 'https://cors-anywhere.herokuapp.com/https://us-central1-map-finder-3666f.cloudfunctions.net/graphql',
 });
 
+// const client = new ApolloClient({
+//   uri:
+    // "https://cors-anywhere.herokuapp.com/https://us-central1-map-finder-3666f.cloudfunctions.net/graphql",
+//   request: (operation) => {
+//     operation.setContext({
+//       headers: {
+//         authorization: `Bearer your-personal-access-token`,
+//       },
+//     });
+//   },
+// });
 
 const SideBar: React.FunctionComponent<Props> = (props) => {
     const setmapValue = props.setmapValue;
@@ -39,23 +51,26 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
     const classes = useStyles();
     const [searchData, setsearchData] = React.useState([]);
     const [userState, setuserState] = React.useState('');
-    console.log(userState)
+    // console.log(userState)
 
 
 
-    const GET_DATA = `query FeedSearchQuery($userID: ID!){
-                                        results(userID:$userID){
-                                            keyword
-                                            docID
-                                            }
-                                        } `;
+    const GET_DATA = `
+      query FeedSearchQuery($userID: ID!) {
+        results(userID: $userID) {
+          keyword
+          docID
+        }
+      }
+    `;
 
     const GET_TABLE_DATA =`query FeedSearchQuery($docID: ID!){
                                     datas(docID:$docID){
                                         data{
+                                            id
                                             rating
                                             vicinity
-                                            user_rating_total
+                                            user_ratings_total
                                             name
                                             geometry{
                                                 location{
@@ -71,84 +86,63 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
 
     React.useEffect(() => {
         firebase.auth.onAuthStateChanged((authUser: any) => {
-        console.log(authUser.uid)
+        console.log(authUser)
         setuserState(authUser.uid)
         
         
         })}, [])
 
   React.useEffect(() => {
-        
-      axiosGraphQL.post('', {
-          query: GET_DATA, variable: {
-              "userID": "5hlpT0dlh5bnhxo1d5PiZXukmcz2"
-                }
-         })
-          .then((result:any) => {
-              console.log(result.data.data.results);
-              setsearchData(result.data.data.results)
-            });
-
-        
-
-  }, [GET_DATA]);
+    axiosGraphQL
+      .post("", {
+        query: GET_DATA,
+        variables: {
+          userID: `${userState}`,
+        },
+      })
+      .then((result: any) => {
+        //   console.log(result.data.data.results);
+        setsearchData(result.data.data.results);
+      });
+  }, [GET_DATA, userState]);
     
 
     const clickHandler = (event: React.MouseEvent<{ id: string }>) => {
+        const docId =event.currentTarget.id;
+        console.log(docId)
         setSpinner(true);
-        axiosGraphQL.post('', { query: GET_TABLE_DATA, mode: 'no-cors'  })
-            .then((data: any) => {
-                setSpinner(false);
-                console.log(data.data.data.results)
-                setmapValue(data.data.data.results)
-            }).catch(error => {
-                setSpinner(false);
-                alert("NETWORK ERROR!!! PLEASE RETRY");
-            })
+        axiosGraphQL
+          .post("", {
+            query: GET_TABLE_DATA,
+            variables: {
+              docID: `${docId}`,
+            },
+          })
+          .then((data: any) => {
+            setSpinner(false);
+            console.log(data.data.data.datas[0].data);
+            setmapValue(data.data.data.datas[0].data);
+          })
+          .catch((error: any) => {
+            setSpinner(false);
+            alert("NETWORK ERROR!!! PLEASE RETRY");
+          });
 
     } 
-    // React.useEffect(() => {
-    //     //LISTEN AND UPDATE
-    //     // ORDER RESULT BY DATE AND LIMIT QUERY TO ONLY 9 RESULT
-    //     firebase.db.collection("results").orderBy("date", "desc").limit(9)
-    //     .onSnapshot(querySnapshot => {
-    //         const docData: any[] = [];
-    //         querySnapshot.forEach(doc => {
-    //             docData.push({
-    //                 id: doc.id,
-    //                 keyword: doc.data().keyword,
-    //             })
-    //         })
-    //         setsearchData(docData)
-    //     })
-
-    // }, [])
-
-
-
-
-    // const clickHandler = (event: React.MouseEvent<{ id: string }>) => {
-    //     setSpinner(true);
-    //     firebase.db.collection('results')
-    //         .doc(`${event.currentTarget.id}`)
-    //         .get()
-    //         .then((docRef:any) => { 
-    //             setSpinner(false);
-    //             setmapValue(docRef.data().data)
-    //         }).catch(error => {
-    //             setSpinner(false);
-    //             alert("NETWORK ERROR!!! PLEASE RETRY");
-    //         })
-
-    // } 
+    
 
     const renderKeywords = searchData.map((data :any, i) => {
-        console.log(data)
+        // console.log(data)
         return (
-      <ListItem button key={data.id} id={data.id} onClick={clickHandler}>
-        <Typography >{data.keyword}</Typography>
-      </ListItem>
-    )});
+          <ListItem
+            button
+            key={data.docID}
+            id={data.docID}
+            onClick={clickHandler}
+          >
+            <Typography>{data.keyword}</Typography>
+          </ListItem>
+        );});
 
     return (
         <ExpansionPanel>
