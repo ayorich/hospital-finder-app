@@ -66,7 +66,7 @@ const PrimarySearchAppBar: React.FunctionComponent<Props> = (Props) => {
   
   
   return (
-    <div className={classes.grow}>
+    <div className={classes.grow} data-test="component-HeaderBar">
       <AppBar position="static">
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
@@ -110,7 +110,7 @@ const PrimarySearchAppBar: React.FunctionComponent<Props> = (Props) => {
               <MenuItem value={50}>50KM</MenuItem>
             </Select>
           </FormControl>
-          <SignOut className={classes.signout}/>
+          <SignOut className={classes.signout} />
         </Toolbar>
       </AppBar>
     </div>

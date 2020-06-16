@@ -107,7 +107,7 @@ const isInvalid =
             email === "" ;
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" data-test="component-SignUp">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>

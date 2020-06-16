@@ -135,21 +135,21 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
       );});
 
   return (
-    <ExpansionPanel onClick={clickData}>
-          <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-          >
-              <Typography className={classes.heading}>RECENTLY SEARCHED RESULTS</Typography>
-          </ExpansionPanelSummary>
-          <List component="nav" aria-label="secondary mailbox folders">
-              {renderKeywords}
-          </List>
-          
-      </ExpansionPanel>
-
-      );
+    <ExpansionPanel onClick={clickData} data-test="component-SideBar">
+      <ExpansionPanelSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+      >
+        <Typography className={classes.heading}>
+          RECENTLY SEARCHED RESULTS
+        </Typography>
+      </ExpansionPanelSummary>
+      <List component="nav" aria-label="secondary mailbox folders">
+        {renderKeywords}
+      </List>
+    </ExpansionPanel>
+  );
 }
 
 

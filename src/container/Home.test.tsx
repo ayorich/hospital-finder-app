@@ -1,12 +1,14 @@
-import React from 'react';
-import renderer from 'react-test-renderer';
+import React from "react";
+import Enzyme, {shallow} from "enzyme";
+import EnzymeAdapter from "enzyme-adapter-react-16";
 
-import Home from './Home';
+import Home from "./Home";
 
-describe('Home', () => {
-    test('snapshot renders', () => {
-        const component = renderer.create(<Home history />);
-        let tree = component.toJSON();
-        expect(tree).toMatchSnapshot();
-    });
+Enzyme.configure({adapter: new EnzymeAdapter()})
+
+it(" Home renders without error", () => {
+    const wrapper = shallow(<Home history/>);
+    const homeComponent = wrapper.find("[data-test='component-home']");
+    expect(homeComponent.length).toBe(1)
 });
+

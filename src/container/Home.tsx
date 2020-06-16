@@ -148,7 +148,7 @@ const Home: React.FC<Props> = (props): JSX.Element => {
     }, [radiusValue, locationValue, debounceSearchTerm, userdata]);
 
     return (
-        <React.Fragment>
+            <div data-test='component-home'>
             <HeaderBar
                 radiusValue={radiusValue}
                 setRadiusValue={setRadiusValue}
@@ -175,8 +175,7 @@ const Home: React.FC<Props> = (props): JSX.Element => {
                         )}
                 </Grid>
             </Grid>
-
-        </React.Fragment>
+        </div>
     );
 }
 

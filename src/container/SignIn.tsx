@@ -103,7 +103,7 @@ const SignIn: React.FunctionComponent<Props> = (props) => {
     const isInvalid =  password === '' || email === '';
 
     return (
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="xs" data-test="component-SignIn">
         <CssBaseline />
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>

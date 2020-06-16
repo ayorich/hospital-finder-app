@@ -1,12 +1,13 @@
-import React from 'react';
-import renderer from 'react-test-renderer';
+import React from "react";
+import Enzyme, { shallow } from "enzyme";
+import EnzymeAdapter from "enzyme-adapter-react-16";
 
-import Signin from './SignIn';
+import SignIn from "./SignIn";
 
-describe('Signin', () => {
-    test('snapshot renders', () => {
-        const component = renderer.create(<Signin />);
-        let tree = component.toJSON();
-        expect(tree).toMatchSnapshot();
-    });
+Enzyme.configure({ adapter: new EnzymeAdapter() });
+
+it(" SignIn renders without error", () => {
+  const wrapper = shallow(<SignIn.WrappedComponent history />);
+  const signComponent = wrapper.find("[data-test='component-SignIn']");
+  expect(signComponent.length).toBe(1);
 });

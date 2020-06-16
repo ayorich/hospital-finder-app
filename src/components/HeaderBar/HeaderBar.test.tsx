@@ -1,12 +1,15 @@
-import React from 'react';
-import renderer from 'react-test-renderer';
+import React from "react";
+import Enzyme, { shallow } from "enzyme";
+import EnzymeAdapter from "enzyme-adapter-react-16";
 
-import HeaderBar from './HeaderBar';
+import HeaderBar from "./HeaderBar";
 
-describe('HeaderBar', () => {
-    test('snapshot renders', () => {
-        const component = renderer.create(<HeaderBar radiusValue setRadiusValue setsearchQuery />);
-        let tree = component.toJSON();
-        expect(tree).toMatchSnapshot();
-    });
+Enzyme.configure({ adapter: new EnzymeAdapter() });
+
+it(" HeaderBar renders without error", () => {
+  const wrapper = shallow(
+    <HeaderBar radiusValue setRadiusValue setsearchQuery />
+  );
+  const headerComponent = wrapper.find("[data-test='component-HeaderBar']");
+  expect(headerComponent.length).toBe(1);
 });

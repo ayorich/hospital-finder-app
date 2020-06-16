@@ -28,7 +28,7 @@ const TableDisplay: React.FunctionComponent<Props> = (props) => {
     const classes = useStyles();
 
     return (
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} >
         {rows ? (
           <Table className={classes.table} aria-label="simple table">
             <TableHead>
