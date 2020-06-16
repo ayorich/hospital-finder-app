@@ -5,7 +5,7 @@ import HeaderBar from './HeaderBar';
 
 describe('HeaderBar', () => {
     test('snapshot renders', () => {
-        const component = renderer.create(<HeaderBar />);
+        const component = renderer.create(<HeaderBar radiusValue setRadiusValue setsearchQuery />);
         let tree = component.toJSON();
         expect(tree).toMatchSnapshot();
     });
