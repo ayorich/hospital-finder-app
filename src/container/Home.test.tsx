@@ -5,7 +5,7 @@ import Home from './Home';
 
 describe('Home', () => {
     test('snapshot renders', () => {
-        const component = renderer.create(<Home />);
+        const component = renderer.create(<Home history />);
         let tree = component.toJSON();
         expect(tree).toMatchSnapshot();
     });

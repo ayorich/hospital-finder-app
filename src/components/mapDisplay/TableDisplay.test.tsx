@@ -5,7 +5,7 @@ import TableDisplay from './TableDisplay';
 
 describe('TableDisplay', () => {
     test('snapshot renders', () => {
-        const component = renderer.create(<TableDisplay />);
+        const component = renderer.create(<TableDisplay mapValue/>);
         let tree = component.toJSON();
         expect(tree).toMatchSnapshot();
     });
