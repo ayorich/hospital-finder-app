@@ -48,14 +48,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const INITIAL_STATE = { 
-//   userName: "",
-//   email: "",
-//   passwordOne: "",
-//   passwordTwo: "",
-//   phone: null,
-//   error: null,
-// };
 
 interface Props {
  history:any;
@@ -79,6 +71,9 @@ const SignUp: React.FunctionComponent<Props> = (props) => {
 
   const authContext = useContext(AuthContext);
   const history = useHistory();
+  console.log(authContext.user)
+    console.log(authContext.authenticated)
+    console.log(authContext.loadingAuthState)
 
 
 // SIGNS UP USER ,SET LOCAL STORAGE REDIRECT USER TO HOMEPAGE
@@ -86,8 +81,8 @@ const SignUp: React.FunctionComponent<Props> = (props) => {
     event?.preventDefault();
       firebase.doCreateUserWithEmailAndPassword(email, passwordOne)
           .then((userCredential : firebase.auth.UserCredential) => {
-            // localStorage.setItem('authUser', JSON.stringify(authUser))
-            console.log(userCredential)
+            
+            console.log(userCredential);
             authContext.setUser(userCredential);
             firebase.db.collection('users')
             .doc(userCredential.user!.uid)

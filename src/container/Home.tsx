@@ -56,8 +56,6 @@ const Home: React.FC<Props> = (props): JSX.Element => {
 
     //DEBOUNCES SEARCHBAR INPUTS FOR 500ms TO AVOID SPAM QUERIES
     const debounceSearchTerm = useDebounce(searchQuery, 500);
-    //GETS USER DETAILS FROM LOCAL STORAGE
-    const userdata: any = localStorage.getItem('authUser')
     
 
 
@@ -100,9 +98,6 @@ const Home: React.FC<Props> = (props): JSX.Element => {
         let data: any;
         let userID:any;
 
-        if (userdata){
-             userID = JSON.parse(userdata).uid ;
-        }
         
         // IF LOCATION AND DEBOUNCE SEARCH IS TRUE
         if (locationValue && debounceSearchTerm) {
@@ -145,7 +140,7 @@ const Home: React.FC<Props> = (props): JSX.Element => {
                     alert("NETWORK ERROR!!! PLEASE RETRY")
                 });
         }
-    }, [radiusValue, locationValue, debounceSearchTerm, userdata]);
+    }, [radiusValue, locationValue, debounceSearchTerm]);
 
     return (
             <div data-test='component-home'>

@@ -1,5 +1,5 @@
 import React , {useContext} from "react";
-import { Link,  useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -66,7 +66,7 @@ interface signIn {
   password: string;
   error: any;
 }
-const SignIn: React.FC<Props> = (props): JSX.Element => {
+const SignIn: React.FC<Props> = (): JSX.Element => {
     const classes = useStyles();
     const [signState, setsignState] = React.useState(INITIAL_STATE as signIn);
     const { email, password, error } = signState;
