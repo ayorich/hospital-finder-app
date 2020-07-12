@@ -5,7 +5,7 @@ import HomePage from './container/Home'
 import SignUpPage from "./container/SignUp";
 import SignInPage from "./container/SignIn";
 import * as ROUTES from "./constants/routes";
-import firebase from "./firebaseConfig";
+import firebase from "./firebase";
 
 import './App.css';
 

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link , withRouter } from 'react-router-dom';
+import React, {useContext} from 'react';
+import { Link , useHistory } from 'react-router-dom';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -12,7 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import firebase from '../firebaseConfig';
+import firebase from "../firebase";
+import { AuthContext } from "../AuthProvider";
 import * as ROUTES from "../constants/routes";
 
 const Copyright = () => (
@@ -47,12 +48,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const INITIAL_STATE = {
-  email: "",
-  passwordOne: "",
-  passwordTwo: "",
-  error: null,
-};
+// const INITIAL_STATE = { 
+//   userName: "",
+//   email: "",
+//   passwordOne: "",
+//   passwordTwo: "",
+//   phone: null,
+//   error: null,
+// };
 
 interface Props {
  history:any;
@@ -60,26 +63,46 @@ interface Props {
 }
 
 interface signUp{
+    userName: string,
     email:any,
     passwordOne: string,
     passwordTwo: string,
+    phone: number,
     error: any,
 }
 
 const SignUp: React.FunctionComponent<Props> = (props) => {
 
   const classes = useStyles();
-  const [signState, setsignState] = React.useState<signUp>(INITIAL_STATE);
-  const { email, passwordOne, passwordTwo, error } = signState;
+  const [signState, setsignState] = React.useState<Partial<signUp>>({});
+  const {userName, email, phone, passwordOne, passwordTwo, error } = signState;
+
+  const authContext = useContext(AuthContext);
+  const history = useHistory();
+
 
 // SIGNS UP USER ,SET LOCAL STORAGE REDIRECT USER TO HOMEPAGE
   const onSubmit = (event :any) => {
+    event?.preventDefault();
       firebase.doCreateUserWithEmailAndPassword(email, passwordOne)
-          .then((authUser) => {
-            localStorage.setItem('authUser', JSON.stringify(authUser))
+          .then((userCredential : firebase.auth.UserCredential) => {
+            // localStorage.setItem('authUser', JSON.stringify(authUser))
+            console.log(userCredential)
+            authContext.setUser(userCredential);
+            firebase.db.collection('users')
+            .doc(userCredential.user!.uid)
+            .set({
+              userName, 
+              email, 
+              phone
+          })
+          
+          })
+          .then((res) =>{
             //empty input values on success
-          setsignState({ ...signState });
-          props.history.push(ROUTES.HOME);
+
+            setsignState({ ...signState });
+            history.push(ROUTES.HOME);
           })
           .catch((error : any) => {
           setsignState({
@@ -92,7 +115,8 @@ const SignUp: React.FunctionComponent<Props> = (props) => {
   };
 
 // HANDLES INPUT VALUE FROM FORM INPUTS FIELD
-const handleChange = (event: React.ChangeEvent<{ value: unknown, name: string }>) => {
+const handleChange = (event: any) => {
+  event.persist();
   setsignState({
     ...signState,
     [event.currentTarget.name] : event.target.value,
@@ -104,7 +128,7 @@ const handleChange = (event: React.ChangeEvent<{ value: unknown, name: string }>
 const isInvalid = 
             passwordOne !== passwordTwo ||
             passwordOne === "" ||
-            email === "" ;
+            email === "" || userName ==="";
 
   return (
     <Container component="main" maxWidth="xs" data-test="component-SignUp">
@@ -119,6 +143,30 @@ const isInvalid =
         {error && <p>{error.message}</p>}
         <form onSubmit={onSubmit} className={classes.form} noValidate>
           <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="userName"
+                label="UserName"
+                name="userName"
+                autoComplete="userName"
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="phone"
+                label="Phone Number"
+                name="phone"
+                autoComplete="phone"
+                onChange={handleChange}
+              />
+            </Grid>
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -183,4 +231,4 @@ const isInvalid =
 }
 
 
-export default withRouter(SignUp);
+export default SignUp;

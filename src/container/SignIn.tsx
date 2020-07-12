@@ -1,5 +1,5 @@
-import React from "react";
-import { Link, withRouter } from "react-router-dom";
+import React , {useContext} from "react";
+import { Link,  useHistory } from "react-router-dom";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -12,7 +12,9 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Container from "@material-ui/core/Container";
 
-import firebase from "../firebaseConfig";
+import firebase from "../firebase";
+import { AuthContext } from "../AuthProvider";
+
 import * as ROUTES from "../constants/routes";
 
 const Copyright = () => (
@@ -60,26 +62,29 @@ interface Props {
 }
 
 interface signIn {
-  email: any;
+  email: string;
   password: string;
   error: any;
 }
 const SignIn: React.FC<Props> = (props): JSX.Element => {
-// const SignIn: React.FunctionComponent<Props> = (props) => {
     const classes = useStyles();
-    const [signState, setsignState] = React.useState<signIn>(INITIAL_STATE);
+    const [signState, setsignState] = React.useState(INITIAL_STATE as signIn);
     const { email, password, error } = signState;
+
+    const authContext = useContext(AuthContext);
+    const history = useHistory();
+   
 
     //ONSUBMIT HANDLES USER DATAS, FIREBASE VALIDATES
     const onSubmit = (event: any) => {
       firebase.doSignInWithEmailAndPassword(email, password)
-        .then((authUser:any) => {
-                //  LOCAL STORAGE 
-                localStorage.setItem('authUser', JSON.stringify(authUser))
+        .then((res:any) => {
+          console.log(res);
+              authContext.setUser(res);
                 //CLEAN USER INPUTS
                 setsignState({ ...INITIAL_STATE });
                 // REDIRECTS TO HOMEPAGE
-                props.history.push(ROUTES.HOME);
+                history.push(ROUTES.HOME);
 
               })
         .catch((error: any) => {
@@ -95,7 +100,7 @@ const SignIn: React.FC<Props> = (props): JSX.Element => {
 
     // HANDLES USER INPUTS
     const handleChange = (event: React.ChangeEvent<{ value: unknown; name: string }>) => {
-
+            event.persist();
             setsignState({
               ...signState,
               [event.currentTarget.name]: event.target.value,
@@ -168,4 +173,4 @@ const SignIn: React.FC<Props> = (props): JSX.Element => {
     );
 };
 
-export default withRouter(SignIn);
+export default SignIn;

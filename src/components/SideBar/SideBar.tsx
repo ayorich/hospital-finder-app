@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import firebase from '../../firebaseConfig';
+import firebase from '../../firebase';
 import axios from "axios";
 
 
@@ -72,9 +72,10 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
 
 //SETS THE USER ID AND UNSUBSCRIBE
   React.useEffect(() => {
-      firebase.auth.onAuthStateChanged((authUser: any) => {
-        setuserState(authUser.uid)
-      })
+      // firebase.auth.onAuthStateChanged((authUser: any) => {
+        console.log(`${firebase}= hey check me am onauthchanged comment in sidebar`)
+        setuserState('null')
+      // })
    
   },
     [])

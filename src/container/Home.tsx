@@ -11,7 +11,7 @@ import GoogleMap from "../components/mapDisplay/googleMap";
 import useDebounce from '../use-debounce';
 
 
-import firebase from '../firebaseConfig';
+import firebase from '../firebase';
 import { v4 as uuidv4 } from 'uuid';
 
 

@@ -7,7 +7,7 @@ import SignIn from "./SignIn";
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 it(" SignIn renders without error", () => {
-  const wrapper = shallow(<SignIn.WrappedComponent history />);
+  const wrapper = shallow(<SignIn history />);
   const signComponent = wrapper.find("[data-test='component-SignIn']");
   expect(signComponent.length).toBe(1);
 });

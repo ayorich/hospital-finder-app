@@ -4,7 +4,7 @@ import {  withRouter } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 
 
-import firebase from "../firebaseConfig";
+import firebase from "../firebase";
 import * as ROUTES from "../constants/routes";
 
 
