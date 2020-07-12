@@ -111,7 +111,6 @@ const SignUp: React.FunctionComponent<Props> = (props) => {
 
           });
 
-      event.preventDefault();
   };
 
 // HANDLES INPUT VALUE FROM FORM INPUTS FIELD
