@@ -7,8 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import firebase from '../../firebase';
 import axios from "axios";
+import firebase from '../../firebase';
 
 
 
@@ -39,7 +39,12 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
     const setSpinner = props.setSpinner;
     const classes = useStyles();
     const [searchData, setsearchData] = React.useState([]);
-    const [userState, setuserState] = React.useState('');
+    const [userID, setUserID] = React.useState('');
+
+
+    React.useEffect(() => { 
+      setUserID(firebase.auth.currentUser!.uid)
+  }, []);
 
 // GRAPHQL QUERY FOR A USER DATA
     const GET_DATA = `
@@ -70,25 +75,12 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
                                         }
                                     }`
 
-//SETS THE USER ID AND UNSUBSCRIBE
-  React.useEffect(() => {
-      // firebase.auth.onAuthStateChanged((authUser: any) => {
-        console.log(`${firebase}= hey check me am onauthchanged comment in sidebar`)
-        setuserState('null')
-      // })
-   
-  },
-    [])
-
-    
- 
-
   const clickData = () => {
       axiosGraphQL
       .post("", {
         query: GET_DATA,
         variables: {
-          userID: `${userState}`,
+          userID: `${userID}`,
         },
       })
       .then((result: any) => {

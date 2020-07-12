@@ -15,7 +15,6 @@ firebase.initializeApp({
 
 let db = firebase.firestore();
 let auth = firebase.auth();
-// console.log(auth)
 // CREATE USER
 const doCreateUserWithEmailAndPassword = (email :any, password : any) =>
   auth.createUserWithEmailAndPassword(email, password);
@@ -24,7 +23,6 @@ const doSignInWithEmailAndPassword = (email :any, password :any) =>
   auth.signInWithEmailAndPassword(email, password);
 //SIGN OUT USER
 const doSignOut = () => auth.signOut();
-// const {user} = firebase
 
 export default {
   firebase,

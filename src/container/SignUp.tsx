@@ -49,11 +49,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-interface Props {
- history:any;
-  
-}
-
 interface signUp{
     userName: string,
     email:any,
@@ -63,7 +58,7 @@ interface signUp{
     error: any,
 }
 
-const SignUp: React.FunctionComponent<Props> = (props) => {
+const SignUp: React.FunctionComponent = (props) => {
 
   const classes = useStyles();
   const [signState, setsignState] = React.useState<Partial<signUp>>({});

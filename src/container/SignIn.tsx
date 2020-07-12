@@ -57,16 +57,14 @@ const INITIAL_STATE = {
   error: null,
 };
 
-interface Props {
-  history: any;
-}
+
 
 interface signIn {
   email: string;
   password: string;
   error: any;
 }
-const SignIn: React.FC<Props> = (): JSX.Element => {
+const SignIn: React.FC = (): JSX.Element => {
     const classes = useStyles();
     const [signState, setsignState] = React.useState(INITIAL_STATE as signIn);
     const { email, password, error } = signState;
@@ -79,7 +77,6 @@ const SignIn: React.FC<Props> = (): JSX.Element => {
     const onSubmit = (event: any) => {
       firebase.doSignInWithEmailAndPassword(email, password)
         .then((res:any) => {
-          console.log(res);
               authContext.setUser(res);
                 //CLEAN USER INPUTS
                 setsignState({ ...INITIAL_STATE });

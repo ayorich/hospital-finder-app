@@ -7,7 +7,7 @@ import Home from "./Home";
 Enzyme.configure({adapter: new EnzymeAdapter()})
 
 it(" Home renders without error", () => {
-    const wrapper = shallow(<Home history/>);
+    const wrapper = shallow(<Home/>);
     const homeComponent = wrapper.find("[data-test='component-home']");
     console.log(wrapper)
     expect(homeComponent.length).toBe(1)

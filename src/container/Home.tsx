@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
@@ -41,24 +42,24 @@ interface latlong {
     longitude: number;
 }
 
-interface Props{
-    history: any,
-}
 
 
-const Home: React.FC<Props> = (props): JSX.Element => {
+
+const Home: React.FC = (props): JSX.Element => {
     const classes = useStyles();
     const [locationValue, setLocationValue] = React.useState<latlong>();
     const [searchQuery, setsearchQuery] = React.useState('');
     const [radiusValue, setRadiusValue] = React.useState<number>(5);
     const [mapValue, setmapValue] = React.useState();
     const [spinner, setSpinner] = React.useState(false);
+    const [userID, setUserID] = React.useState('');
 
     //DEBOUNCES SEARCHBAR INPUTS FOR 500ms TO AVOID SPAM QUERIES
     const debounceSearchTerm = useDebounce(searchQuery, 500);
     
-
-
+    React.useEffect(() => { 
+        setUserID(firebase.auth.currentUser!.uid)
+    }, []);
    
     // GETS USER LOCATION AND WATCH FOR CHANGES
     React.useEffect(() => {
@@ -96,9 +97,8 @@ const Home: React.FC<Props> = (props): JSX.Element => {
         let radius: any;
         let keyword: any;
         let data: any;
-        let userID:any;
-
         
+
         // IF LOCATION AND DEBOUNCE SEARCH IS TRUE
         if (locationValue && debounceSearchTerm) {
             //SETS SPINNER TO TRUE
@@ -107,7 +107,7 @@ const Home: React.FC<Props> = (props): JSX.Element => {
             lat = locationValue.latitude;
             long = locationValue.longitude;
             keyword = debounceSearchTerm;
-
+            
             // QUERIES URL AND SETSTATE
             const proxyurl = "https://cors-anywhere.herokuapp.com/";
             const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${long}&radius=${radius}&type=hospital&keyword=${keyword}&key=${key}`;
@@ -121,6 +121,7 @@ const Home: React.FC<Props> = (props): JSX.Element => {
 
                 })
                 .then(res => {
+                    console.log(userID)
                     //IF DATA.LENGTH>0 EQUALS TRUE GENERATES DOCID, TIMESTAMP AND POST TO DATABASE
                     if (data.length > 0) {
                         let keyGen = uuidv4();
@@ -140,7 +141,7 @@ const Home: React.FC<Props> = (props): JSX.Element => {
                     alert("NETWORK ERROR!!! PLEASE RETRY")
                 });
         }
-    }, [radiusValue, locationValue, debounceSearchTerm]);
+    }, [radiusValue, locationValue, debounceSearchTerm, userID]);
 
     return (
             <div data-test='component-home'>
