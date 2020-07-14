@@ -3,14 +3,8 @@ import ApplicationRoutes from './ApplicationRoutes';
 
 import './App.css';
 
-
-
-
 const App: React.FC = (): JSX.Element => {
-  
-  return (
-    <ApplicationRoutes/>
-  );
-}
+    return <ApplicationRoutes />;
+};
 
 export default App;

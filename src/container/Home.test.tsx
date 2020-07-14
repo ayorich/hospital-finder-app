@@ -1,15 +1,14 @@
-import React from "react";
-import Enzyme, {shallow} from "enzyme";
-import EnzymeAdapter from "enzyme-adapter-react-16";
+import React from 'react';
+import Enzyme, { shallow } from 'enzyme';
+import EnzymeAdapter from 'enzyme-adapter-react-16';
 
-import Home from "./Home";
+import Home from './Home';
 
-Enzyme.configure({adapter: new EnzymeAdapter()})
+Enzyme.configure({ adapter: new EnzymeAdapter() });
 
-it(" Home renders without error", () => {
-    const wrapper = shallow(<Home/>);
+it(' Home renders without error', () => {
+    const wrapper = shallow(<Home />);
     const homeComponent = wrapper.find("[data-test='component-home']");
-    console.log(wrapper)
-    expect(homeComponent.length).toBe(1)
+    console.log(wrapper);
+    expect(homeComponent.length).toBe(1);
 });
-

@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -8,19 +8,15 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-
-
 const useStyles = makeStyles({
     table: {
         minWidth: 650,
     },
 });
 
-
-interface Props { 
-    mapValue:any;
+interface Props {
+    mapValue: any;
 }
-
 
 // RECIEVES TABLE DATA FROM HOME AND DISPLAYS IN ROWS
 const TableDisplay: React.FunctionComponent<Props> = (props) => {
@@ -28,41 +24,42 @@ const TableDisplay: React.FunctionComponent<Props> = (props) => {
     const classes = useStyles();
 
     return (
-      <TableContainer component={Paper} >
-        {rows ? (
-          <Table className={classes.table} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>NAME</TableCell>
-                <TableCell align="right">vicinity</TableCell>
-                <TableCell align="right">Rating</TableCell>
-                <TableCell align="right">Total rating</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row: any) => (
-                <TableRow key={row.id}>
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="right">{row.vicinity}</TableCell>
-                  <TableCell align="right">{row.rating}</TableCell>
-                  <TableCell align="right">{row.user_ratings_total}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        ) : null}
-      </TableContainer>
+        <TableContainer component={Paper}>
+            {rows ? (
+                <Table className={classes.table} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>NAME</TableCell>
+                            <TableCell align="right">vicinity</TableCell>
+                            <TableCell align="right">Rating</TableCell>
+                            <TableCell align="right">Total rating</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {rows.map((row: any) => (
+                            <TableRow key={row.id}>
+                                <TableCell component="th" scope="row">
+                                    {row.name}
+                                </TableCell>
+                                <TableCell align="right">
+                                    {row.vicinity}
+                                </TableCell>
+                                <TableCell align="right">
+                                    {row.rating}
+                                </TableCell>
+                                <TableCell align="right">
+                                    {row.user_ratings_total}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            ) : null}
+        </TableContainer>
     );
-}
-
+};
 
 export default TableDisplay;
-
-
-
-
 
 /**
  * GOOGLE DATA EXTRACTED

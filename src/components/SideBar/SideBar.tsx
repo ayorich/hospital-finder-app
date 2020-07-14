@@ -7,10 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import axios from "axios";
+import axios from 'axios';
 import firebase from '../../firebase';
-
-
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -29,10 +27,9 @@ interface Props {
     setSpinner: any;
 }
 const axiosGraphQL = axios.create({
-    baseURL: 'https://cors-anywhere.herokuapp.com/https://us-central1-map-finder-3666f.cloudfunctions.net/graphql',
+    baseURL:
+        'https://cors-anywhere.herokuapp.com/https://us-central1-map-finder-3666f.cloudfunctions.net/graphql',
 });
-
-
 
 const SideBar: React.FunctionComponent<Props> = (props) => {
     const setmapValue = props.setmapValue;
@@ -41,12 +38,11 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
     const [searchData, setsearchData] = React.useState([]);
     const [userID, setUserID] = React.useState('');
 
+    React.useEffect(() => {
+        setUserID(firebase.auth.currentUser!.uid);
+    }, []);
 
-    React.useEffect(() => { 
-      setUserID(firebase.auth.currentUser!.uid)
-  }, []);
-
-// GRAPHQL QUERY FOR A USER DATA
+    // GRAPHQL QUERY FOR A USER DATA
     const GET_DATA = `
       query FeedSearchQuery($userID: ID!) {
         results(userID: $userID) {
@@ -56,8 +52,8 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
       }
     `;
 
-// GRAPHQL QUERY FOR A DOCUMENT DATA
-    const GET_TABLE_DATA =`query FeedSearchQuery($docID: ID!){
+    // GRAPHQL QUERY FOR A DOCUMENT DATA
+    const GET_TABLE_DATA = `query FeedSearchQuery($docID: ID!){
                                     datas(docID:$docID){
                                         data{
                                             id
@@ -73,84 +69,75 @@ const SideBar: React.FunctionComponent<Props> = (props) => {
                                                 }
                                             }
                                         }
-                                    }`
+                                    }`;
 
-  const clickData = () => {
-      axiosGraphQL
-      .post("", {
-        query: GET_DATA,
-        variables: {
-          userID: `${userID}`,
-        },
-      })
-      .then((result: any) => {
-        setsearchData(result.data.data.results);
-      })
+    const clickData = () => {
+        axiosGraphQL
+            .post('', {
+                query: GET_DATA,
+                variables: {
+                    userID: `${userID}`,
+                },
+            })
+            .then((result: any) => {
+                setsearchData(result.data.data.results);
+            });
+    };
 
-  }
-    
-// HANDLES THE ONCLICK EVENT FROM THE SIDEBAR LIST TO UPDATE THE DISPLAY TABLE AND MAP DATAS
-  const clickHandler = (event: React.MouseEvent<{ id: string }>) => {
-      const docId = event.currentTarget.id;
-      // SETS SPINNER TO TRUE AND POST ITS REQUEST {QUERY, VARIABLES}
-      setSpinner(true);
-      axiosGraphQL
-        .post("", {
-          query: GET_TABLE_DATA,
-          variables: {
-            docID: `${docId}`,
-          },
-        })
-        .then((data: any) => {
-        // SETS SPINNER TO FALSE AND SETS MAP DATA VALUES
-          setSpinner(false);
-          setmapValue(data.data.data.datas[0].data);
-        })
-        .catch((error: any) => {
-        // SETS SPINNER TO FALSE AND ALERT ERRORS
-          setSpinner(false);
-          alert("NETWORK ERROR!!! PLEASE RETRY");
-        });
+    // HANDLES THE ONCLICK EVENT FROM THE SIDEBAR LIST TO UPDATE THE DISPLAY TABLE AND MAP DATAS
+    const clickHandler = (event: React.MouseEvent<{ id: string }>) => {
+        const docId = event.currentTarget.id;
+        // SETS SPINNER TO TRUE AND POST ITS REQUEST {QUERY, VARIABLES}
+        setSpinner(true);
+        axiosGraphQL
+            .post('', {
+                query: GET_TABLE_DATA,
+                variables: {
+                    docID: `${docId}`,
+                },
+            })
+            .then((data: any) => {
+                // SETS SPINNER TO FALSE AND SETS MAP DATA VALUES
+                setSpinner(false);
+                setmapValue(data.data.data.datas[0].data);
+            })
+            .catch((error: any) => {
+                // SETS SPINNER TO FALSE AND ALERT ERRORS
+                setSpinner(false);
+                alert('NETWORK ERROR!!! PLEASE RETRY');
+            });
+    };
 
-  } 
-    
-// RETURNS A LIST OF SEARCH DATAS FROM DATABASE AND PASS THE docID 
-  const renderKeywords = searchData.map((data :any, i) => {
-      return (
-        <ListItem
-          button
-          key={data.docID}
-          id={data.docID}
-          onClick={clickHandler}
-        >
-          <Typography>{data.keyword}</Typography>
-        </ListItem>
-      );});
+    // RETURNS A LIST OF SEARCH DATAS FROM DATABASE AND PASS THE docID
+    const renderKeywords = searchData.map((data: any, i) => {
+        return (
+            <ListItem
+                button
+                key={data.docID}
+                id={data.docID}
+                onClick={clickHandler}
+            >
+                <Typography>{data.keyword}</Typography>
+            </ListItem>
+        );
+    });
 
-  return (
-    <ExpansionPanel onClick={clickData} data-test="component-SideBar">
-      <ExpansionPanelSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
-        <Typography className={classes.heading}>
-          RECENTLY SEARCHED RESULTS
-        </Typography>
-      </ExpansionPanelSummary>
-      <List component="nav" aria-label="secondary mailbox folders">
-        {renderKeywords}
-      </List>
-    </ExpansionPanel>
-  );
-}
-
+    return (
+        <ExpansionPanel onClick={clickData} data-test="component-SideBar">
+            <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+            >
+                <Typography className={classes.heading}>
+                    RECENTLY SEARCHED RESULTS
+                </Typography>
+            </ExpansionPanelSummary>
+            <List component="nav" aria-label="secondary mailbox folders">
+                {renderKeywords}
+            </List>
+        </ExpansionPanel>
+    );
+};
 
 export default SideBar;
-
-
-
-
-
-
-
